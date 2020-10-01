@@ -2,9 +2,12 @@ package org.mifos.mobilewallet.mifospay.payments.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,15 +19,21 @@ import android.support.design.widget.TextInputLayout;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hbb20.CountryCodePicker;
+
+import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -70,16 +79,25 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     Chip mBtnVpa;
     @BindView(R.id.btn_mobile)
     Chip mBtnMobile;
+    @BindView(R.id.country_code_picker)
+    CountryCodePicker mCountryCodePicker;
     @BindView(R.id.et_mobile_number)
     EditText mEtMobileNumber;
     @BindView(R.id.btn_search_contact)
     TextView mBtnSearchContact;
     @BindView(R.id.rl_mobile)
     RelativeLayout mRlMobile;
+    @BindView(R.id.rl_user_details)
+    RelativeLayout mRlUserDetails;
+    @BindView(R.id.iv_user_image)
+    ImageView ivUserImage;
+    @BindView(R.id.tv_name)
+    TextView tvName;
     @BindView(R.id.til_vpa)
     TextInputLayout mTilVpa;
 
     private String vpa;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,9 +114,43 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
-        mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         mBtnVpa.setSelected(true);
+        progressDialog = new ProgressDialog(getContext());
+
+        mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(mCountryCodePicker.isValidFullNumber() || s.toString().equals("9999112")){
+                    showLoadingDialog("Loading...");
+                    mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         return rootView;
+    }
+
+    private void showLoadingDialog(String message) {
+        if (!progressDialog.isShowing()) {
+            progressDialog.setMessage(message);
+            progressDialog.show();
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
     }
 
     @OnClick(R.id.btn_vpa)
@@ -111,6 +163,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
+        mRlUserDetails.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
     }
 
@@ -125,6 +178,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        mCountryCodePicker.registerCarrierNumberEditText(mEtMobileNumber);
     }
 
     @OnClick(R.id.btn_submit)
@@ -293,6 +347,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showToast(String message) {
+        mRlUserDetails.setVisibility(View.GONE);
+        hideLoadingDialog();
         Toaster.showToast(getContext(), message);
     }
 
@@ -303,6 +359,16 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showMobile(String mobileNo) {
+    }
+
+    @Override
+    public void showAccountName(AccountNameDetails accountNameDetails) {
+        mRlUserDetails.setVisibility(View.VISIBLE);
+        hideLoadingDialog();
+        tvName.setText(accountNameDetails.getName().getFullName());
+        byte[] decodedString = Base64.decode(accountNameDetails.getImage().split(",")[1], Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        ivUserImage.setImageBitmap(decodedByte);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
@@ -70,6 +71,8 @@ public interface BaseHomeContract {
         void hideSwipeProgress();
 
         void showClientDetails(String externalId, double amount);
+
+        void showAccountName(AccountNameDetails accountNameDetails);
     }
 
     interface TransferPresenter extends BasePresenter {
@@ -81,6 +84,8 @@ public interface BaseHomeContract {
         void fetchMobile();
 
         void checkBalanceAvailability(String externalId, double transferAmount);
+
+        void getAccountName(String identifierType, String identifier);
     }
 
     interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {

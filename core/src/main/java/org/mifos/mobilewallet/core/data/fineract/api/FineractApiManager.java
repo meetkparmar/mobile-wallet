@@ -57,6 +57,7 @@ public class FineractApiManager {
     private static NotificationService notificationApi;
 
     private static SelfServiceApiManager sSelfInstance;
+    private static FinancialApiManager sFinanceInstance;
 
     public FineractApiManager() {
         String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD
@@ -65,6 +66,10 @@ public class FineractApiManager {
 
         if (sSelfInstance == null) {
             sSelfInstance = new SelfServiceApiManager();
+        }
+
+        if (sFinanceInstance == null) {
+            sFinanceInstance = new FinancialApiManager();
         }
     }
 
@@ -119,6 +124,10 @@ public class FineractApiManager {
 
     public static SelfServiceApiManager getSelfApiManager() {
         return sSelfInstance;
+    }
+
+    public static FinancialApiManager getsFinanceInstance() {
+        return sFinanceInstance;
     }
 
     public AuthenticationService getAuthenticationApi() {

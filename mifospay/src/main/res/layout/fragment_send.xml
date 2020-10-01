@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -68,12 +68,12 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:paddingRight="@dimen/value_10dp"
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
-                android:paddingRight="@dimen/value_10dp"
                 android:textAllCaps="false"
-                android:textSize="8sp"
                 android:textColor="@android:color/black"
+                android:textSize="8sp"
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/changedBackgroundColour" />
 
@@ -153,13 +153,25 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_height="60dp"
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/country_code_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_toStartOf="@id/et_mobile_number"
+                    android:gravity="center"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoFormatNumber="false" />
+
+                <android.support.design.widget.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/value_15dp"
                     android:layout_marginRight="@dimen/value_15dp"
                     android:layout_toLeftOf="@+id/btn_search_contact"
+                    android:layout_toRightOf="@id/country_code_picker"
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
@@ -167,12 +179,12 @@
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingBottom="@dimen/value_10dp"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
+                        android:maxLength="@integer/telephone_numbers_max_length_standard"
+                        android:paddingBottom="@dimen/value_10dp"
                         android:singleLine="true"
                         android:textAlignment="center"
-                        android:maxLength="@integer/telephone_numbers_max_length_standard"
                         android:textSize="@dimen/value_15sp" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -182,17 +194,50 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/value_10dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/value_10dp"
                     android:background="@drawable/ic_contact"
                     android:gravity="bottom" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_user_details"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:visibility="gone">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_user_image"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/value_20dp"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/value_15dp"
+                    android:layout_marginTop="@dimen/value_6dp"
+                    android:layout_marginRight="@dimen/value_20dp"
+                    android:layout_marginBottom="@dimen/value_6dp"
+                    android:layout_toRightOf="@id/iv_user_image"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/value_15dp"
+                    android:text="Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/value_15sp" />
+
             </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/value_10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -220,8 +265,6 @@
             android:layout_marginTop="@dimen/value_20dp"
             android:layout_marginBottom="50dp"
             android:orientation="horizontal">
-
-
 
 
         </LinearLayout>

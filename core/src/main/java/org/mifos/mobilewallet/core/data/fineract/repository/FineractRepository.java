@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
+import org.mifos.mobilewallet.core.data.fineract.api.FinancialApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
@@ -22,6 +23,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
+import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -51,11 +53,13 @@ public class FineractRepository {
 
     private final FineractApiManager fineractApiManager;
     private final SelfServiceApiManager selfApiManager;
+    private final FinancialApiManager financialApiManager;
 
     @Inject
     public FineractRepository(FineractApiManager fineractApiManager) {
         this.fineractApiManager = fineractApiManager;
         this.selfApiManager = FineractApiManager.getSelfApiManager();
+        this.financialApiManager = FineractApiManager.getsFinanceInstance();
     }
 
     public Observable<CreateClient.ResponseValue> createClient(NewClient newClient) {
@@ -262,5 +266,9 @@ public class FineractRepository {
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
             BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
+    }
+
+    public Observable<AccountNameDetails> getAccountName(String identifierType, String identifier) {
+        return financialApiManager.getFinancialServiceApi().getAccountName(identifierType, identifier);
     }
 }

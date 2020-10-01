@@ -2,7 +2,9 @@ package org.mifos.mobilewallet.mifospay.payments.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountName;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -23,6 +25,9 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     FetchClientData fetchClientData;
     @Inject
     FetchAccount mFetchAccount;
+    @Inject
+    FetchAccountName mFetchAccountName;
+    AccountNameDetails accountNameDetails;
 
     private BaseHomeContract.TransferView mTransferView;
 
@@ -72,6 +77,24 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
                     public void onError(String message) {
                         mTransferView.hideSwipeProgress();
                         mTransferView.showToast(Constants.ERROR_FETCHING_BALANCE);
+                    }
+                });
+    }
+
+    @Override
+    public void getAccountName(String identifierType, String identifier) {
+        mUsecaseHandler.execute(mFetchAccountName,
+                new FetchAccountName.RequestValues(identifierType, identifier),
+                new UseCase.UseCaseCallback<FetchAccountName.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchAccountName.ResponseValue response) {
+                        accountNameDetails = response.getAccountNameDetails();
+                        mTransferView.showAccountName(accountNameDetails);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mTransferView.showToast(Constants.ERROR_FETCHING_ACCOUNT_NAME);
                     }
                 });
     }
