@@ -24,6 +24,8 @@ import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -186,7 +188,7 @@ public class FineractRepository {
     }
 
     public Observable<ResponseBody> getTransactionReceipt(String outputType,
-            String transactionId) {
+                                                          String transactionId) {
         return fineractApiManager.getRunReportApi().getTransactionReceipt(outputType,
                 transactionId);
     }
@@ -270,5 +272,9 @@ public class FineractRepository {
 
     public Observable<AccountNameDetails> getAccountName(String identifierType, String identifier) {
         return financialApiManager.getFinancialServiceApi().getAccountName(identifierType, identifier);
+    }
+
+    public Observable<CurrencyConversionResponseBody> currencyConvert(CurrencyConversionRequestBody currencyConversionRequestBody) {
+        return financialApiManager.getFinancialServiceApi().currencyConvert(currencyConversionRequestBody);
     }
 }

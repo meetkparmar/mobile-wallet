@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -107,6 +108,11 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
 
     @Override
     public void showAccountName(AccountNameDetails accountNameDetails) {
+
+    }
+
+    @Override
+    public void showCurrencyConversionDetails(CurrencyConversionResponseBody currencyConversionResponseBody) {
 
     }
 

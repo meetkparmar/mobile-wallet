@@ -2,6 +2,8 @@ package org.mifos.mobilewallet.mifospay.home;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
@@ -73,6 +75,8 @@ public interface BaseHomeContract {
         void showClientDetails(String externalId, double amount);
 
         void showAccountName(AccountNameDetails accountNameDetails);
+
+        void showCurrencyConversionDetails(CurrencyConversionResponseBody currencyConversionResponseBody);
     }
 
     interface TransferPresenter extends BasePresenter {
@@ -86,6 +90,8 @@ public interface BaseHomeContract {
         void checkBalanceAvailability(String externalId, double transferAmount);
 
         void getAccountName(String identifierType, String identifier);
+
+        void currencyConvert(CurrencyConversionRequestBody currencyConversionRequestBody);
     }
 
     interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {

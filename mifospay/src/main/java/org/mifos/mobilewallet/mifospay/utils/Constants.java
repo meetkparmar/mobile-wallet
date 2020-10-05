@@ -67,6 +67,7 @@ public class Constants {
     public static final String PROFILE = "Profile";
     public static final String ERROR_FETCHING_BALANCE = "Error fetching balance";
     public static final String ERROR_FETCHING_ACCOUNT_NAME = "Error fetching account name";
+    public static final String UNABLE_TO_CONVERT_CURRENCY = "Unable to convert currency";
     public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
     public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
     public static final String SENDING_MONEY = "Sending money...";

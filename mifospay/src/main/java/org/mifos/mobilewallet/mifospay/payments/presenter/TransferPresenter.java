@@ -3,6 +3,9 @@ package org.mifos.mobilewallet.mifospay.payments.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
+import org.mifos.mobilewallet.core.domain.usecase.account.CurrencyConvert;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountName;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
@@ -28,6 +31,10 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     @Inject
     FetchAccountName mFetchAccountName;
     AccountNameDetails accountNameDetails;
+
+    @Inject
+    CurrencyConvert currencyConvert;
+    CurrencyConversionResponseBody currencyConversionResponseBody;
 
     private BaseHomeContract.TransferView mTransferView;
 
@@ -77,6 +84,24 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
                     public void onError(String message) {
                         mTransferView.hideSwipeProgress();
                         mTransferView.showToast(Constants.ERROR_FETCHING_BALANCE);
+                    }
+                });
+    }
+
+    @Override
+    public void currencyConvert(CurrencyConversionRequestBody currencyConversionRequestBody) {
+        mUsecaseHandler.execute(currencyConvert,
+                new CurrencyConvert.RequestValues(currencyConversionRequestBody),
+                new UseCase.UseCaseCallback<CurrencyConvert.ResponseValue>() {
+                    @Override
+                    public void onSuccess(CurrencyConvert.ResponseValue response) {
+                        currencyConversionResponseBody = response.getCurrencyConversionResponseBody();
+                        mTransferView.showCurrencyConversionDetails(currencyConversionResponseBody);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mTransferView.showToast(Constants.UNABLE_TO_CONVERT_CURRENCY);
                     }
                 });
     }

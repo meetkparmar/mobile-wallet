@@ -3,7 +3,9 @@ package org.mifos.mobilewallet.mifospay.payments.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,8 +35,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
+import com.mynameismidori.currencypicker.CurrencyPicker;
+import com.mynameismidori.currencypicker.CurrencyPickerListener;
+import com.mynameismidori.currencypicker.ExtendedCurrency;
 
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
+import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -43,6 +51,9 @@ import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+
+import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -67,8 +78,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     BaseHomeContract.TransferPresenter mTransferPresenter;
     @BindView(R.id.rl_send_container)
     ViewGroup sendContainer;
-    @BindView(R.id.et_amount)
-    EditText etAmount;
     @BindView(R.id.et_vpa)
     EditText etVpa;
     @BindView(R.id.btn_submit)
@@ -95,9 +104,20 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextView tvName;
     @BindView(R.id.til_vpa)
     TextInputLayout mTilVpa;
+    @BindView(R.id.amount_from_currency_code)
+    TextView mAmountFromCurrencyCode;
+    @BindView(R.id.amount_to_currency_code)
+    TextView mAmountToCurrencyCode;
+    @BindView(R.id.et_amount_from)
+    TextView mEtAmountFrom;
+    @BindView(R.id.et_amount_to)
+    TextView mEtAmountTo;
 
     private String vpa;
     private ProgressDialog progressDialog;
+    private CurrencyConversionRequestBody currencyConversionRequestBody;
+    private String countryFrom = "USD";
+    private String countryTo = "INR";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -108,7 +128,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_send, container,
                 false);
         ButterKnife.bind(this, rootView);
@@ -116,6 +136,9 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mPresenter.attachView(this);
         mBtnVpa.setSelected(true);
         progressDialog = new ProgressDialog(getContext());
+
+        mAmountFromCurrencyCode.setText(countryFrom);
+        mAmountToCurrencyCode.setText(countryTo);
 
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
             @Override
@@ -125,7 +148,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(mCountryCodePicker.isValidFullNumber() || s.toString().equals("9999112")){
+                if (mCountryCodePicker.isValidFullNumber() || s.toString().equals("9999112")) {
                     showLoadingDialog("Loading...");
                     mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber());
                 }
@@ -184,7 +207,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @OnClick(R.id.btn_submit)
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
-        String eamount = etAmount.getText().toString().trim();
+        String eamount = mEtAmountFrom.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
@@ -219,6 +242,44 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             Intent i = new Intent(getActivity(), ReadQrActivity.class);
             startActivityForResult(i, SCAN_QR_REQUEST_CODE);
         }
+    }
+
+    @OnClick(R.id.amount_from_currency_layout)
+    public void amountFromCurrencyCodeClicked() {
+        final CurrencyPicker picker = CurrencyPicker.newInstance("Select Currency");  // dialog title
+        picker.setListener(new CurrencyPickerListener() {
+            @Override
+            public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
+                mAmountFromCurrencyCode.setText(code);
+                countryFrom = code;
+                picker.dismiss();
+            }
+        });
+        picker.show(getFragmentManager(), "CURRENCY_PICKER");
+    }
+
+    @OnClick(R.id.amount_to_currency_layout)
+    public void amountToCurrencyCodeClicked() {
+        final CurrencyPicker picker = CurrencyPicker.newInstance("Select Currency");  // dialog title
+        picker.setListener(new CurrencyPickerListener() {
+            @Override
+            public void onSelectCurrency(String name, String code, String symbol, int flagDrawableResID) {
+                mAmountToCurrencyCode.setText(code);
+                countryTo = code;
+                picker.dismiss();
+            }
+        });
+        picker.show(getFragmentManager(), "CURRENCY_PICKER");
+    }
+
+    @OnClick(R.id.btn_convert_currency)
+    public void btnConvertCurrency() {
+        String lockKey = UUID.randomUUID().toString();
+        countryFrom = mAmountFromCurrencyCode.getText().toString();
+        countryTo = mAmountToCurrencyCode.getText().toString();
+        currencyConversionRequestBody = new CurrencyConversionRequestBody(lockKey, mEtAmountFrom.getText().toString(), countryFrom, countryTo, false);
+        showLoadingDialog("Loading...");
+        mTransferPresenter.currencyConvert(currencyConversionRequestBody);
     }
 
     @Override
@@ -258,14 +319,14 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 etVpa.setText(qrDataArray[0]);
             } else {
                 etVpa.setText(qrDataArray[0]);
-                etAmount.setText(qrDataArray[1]);
+                mEtAmountFrom.setText(qrDataArray[1]);
             }
             String externalId = etVpa.getText().toString();
-            if (etAmount.getText().toString().isEmpty()) {
+            if (mEtAmountFrom.getText().toString().isEmpty()) {
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
                 return;
             }
-            double amount = Double.parseDouble(etAmount.getText().toString());
+            double amount = Double.parseDouble(mEtAmountFrom.getText().toString());
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
@@ -307,7 +368,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CAMERA: {
                 // If request is cancelled, the result arrays are empty.
@@ -372,6 +433,13 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     }
 
     @Override
+    public void showCurrencyConversionDetails(CurrencyConversionResponseBody currencyConversionResponseBody) {
+        hideLoadingDialog();
+        String convertedAmount = currencyConversionResponseBody.getConvertedAmount().toString();
+        mEtAmountTo.setText(convertedAmount);
+    }
+
+    @Override
     public void showClientDetails(String externalId, double amount) {
         MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS);
@@ -380,6 +448,4 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
-
-
 }
