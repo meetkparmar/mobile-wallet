@@ -30,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,6 +95,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     EditText mEtMobileNumber;
     @BindView(R.id.btn_search_contact)
     TextView mBtnSearchContact;
+    @BindView(R.id.vpa_layout)
+    LinearLayout mVpaLayout;
     @BindView(R.id.rl_mobile)
     RelativeLayout mRlMobile;
     @BindView(R.id.rl_user_details)
@@ -184,6 +187,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnMobile.setSelected(false);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mVpaLayout.setVisibility(View.VISIBLE);
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mRlUserDetails.setVisibility(View.GONE);
@@ -198,6 +202,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setSelected(false);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mVpaLayout.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);

@@ -42,11 +42,11 @@
                 android:id="@+id/btn_vpa"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginStart="11dp"
-                android:layout_marginLeft="11dp"
+                android:layout_marginEnd="61dp"
+                android:layout_marginRight="70dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -54,17 +54,17 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/clickedblue" />
+                app:chipBackgroundColor="@color/changedBackgroundColour"/>
 
             <android.support.design.chip.Chip
                 android:id="@+id/btn_mobile"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginEnd="61dp"
-                android:layout_marginRight="70dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginLeft="11dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
@@ -75,7 +75,7 @@
                 android:textColor="@android:color/black"
                 android:textSize="8sp"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/changedBackgroundColour" />
+                app:chipBackgroundColor="@color/clickedblue"  />
 
         </RelativeLayout>
 
@@ -85,158 +85,12 @@
             android:layout_marginTop="@dimen/value_20dp"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/amount_from_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginStart="@dimen/value_20dp"
-                    android:layout_marginEnd="@dimen/value_20dp"
-                    app:layout_constraintEnd_toStartOf="@id/btn_convert_layout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/amount_from_currency_layout"
-                        android:layout_width="@dimen/value_120dp"
-                        android:layout_height="56dp"
-                        android:layout_centerVertical="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/amount_from_currency_code"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textSize="24sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/down_arrow1"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/down_arrow1"
-                            android:layout_width="@dimen/value_30dp"
-                            android:layout_height="@dimen/value_30dp"
-                            android:background="@drawable/ic_baseline_arrow_drop_down_24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-
-
-                    <EditText
-                        android:id="@+id/et_amount_from"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_marginLeft="@dimen/value_20dp"
-                        android:gravity="center"
-                        android:hint="0"
-                        android:inputType="number"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/colorAccent"
-                        android:textSize="32sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toEndOf="@id/amount_from_currency_layout"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                </android.support.constraint.ConstraintLayout>
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/amount_to_layout"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginTop="@dimen/value_15dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@id/amount_from_layout"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/amount_from_layout">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:id="@+id/amount_to_currency_layout"
-                        android:layout_width="@dimen/value_120dp"
-                        android:layout_height="56dp"
-                        android:layout_centerVertical="true"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <TextView
-                            android:id="@+id/amount_to_currency_code"
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:textSize="24sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/down_arrow2"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/down_arrow2"
-                            android:layout_width="@dimen/value_30dp"
-                            android:layout_height="@dimen/value_30dp"
-                            android:background="@drawable/ic_baseline_arrow_drop_down_24"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-
-                    <EditText
-                        android:id="@+id/et_amount_to"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
-                        android:layout_marginLeft="@dimen/value_20dp"
-                        android:clickable="false"
-                        android:enabled="false"
-                        android:gravity="center"
-                        android:hint="0"
-                        android:inputType="number"
-                        android:textColor="@color/colorAccent"
-                        android:textColorHint="@color/colorAccent"
-                        android:textSize="32sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/amount_to_currency_layout"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
-
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/btn_convert_layout"
-                    android:layout_width="@dimen/value_40dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="@dimen/value_20dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/btn_convert_currency"
-                        android:layout_width="@dimen/value_40dp"
-                        android:layout_height="@dimen/value_40dp"
-                        android:background="@drawable/ic_swap_horiz"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </android.support.constraint.ConstraintLayout>
-
-            </android.support.constraint.ConstraintLayout>
-
             <LinearLayout
+                android:id="@+id/vpa_layout"
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp">
+                android:layout_marginTop="@dimen/value_10dp"
+                android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/til_vpa"
@@ -279,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <com.hbb20.CountryCodePicker
                     android:id="@+id/country_code_picker"
@@ -360,6 +214,149 @@
                     android:textSize="@dimen/value_15sp" />
 
             </RelativeLayout>
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_10dp">
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/amount_from_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginStart="@dimen/value_20dp"
+                    android:layout_marginEnd="@dimen/value_20dp"
+                    app:layout_constraintEnd_toStartOf="@id/btn_convert_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/amount_from_currency_layout"
+                        android:layout_width="@dimen/value_120dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/amount_from_currency_code"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/down_arrow1"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/down_arrow1"
+                            android:layout_width="@dimen/value_30dp"
+                            android:layout_height="@dimen/value_30dp"
+                            android:background="@drawable/ic_baseline_arrow_drop_down_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </android.support.constraint.ConstraintLayout>
+
+
+                    <EditText
+                        android:id="@+id/et_amount_from"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/value_20dp"
+                        android:gravity="center"
+                        android:hint="0"
+                        android:inputType="number"
+                        android:textSize="36sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/amount_from_currency_layout"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/amount_to_layout"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_marginTop="@dimen/value_15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/amount_from_layout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/amount_from_layout">
+
+                    <android.support.constraint.ConstraintLayout
+                        android:id="@+id/amount_to_currency_layout"
+                        android:layout_width="@dimen/value_120dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/amount_to_currency_code"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:textSize="24sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/down_arrow2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/down_arrow2"
+                            android:layout_width="@dimen/value_30dp"
+                            android:layout_height="@dimen/value_30dp"
+                            android:background="@drawable/ic_baseline_arrow_drop_down_24"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <EditText
+                        android:id="@+id/et_amount_to"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/value_20dp"
+                        android:clickable="false"
+                        android:enabled="false"
+                        android:gravity="center"
+                        android:hint="0"
+                        android:inputType="number"
+                        android:textSize="36sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/amount_to_currency_layout"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/btn_convert_layout"
+                    android:layout_width="@dimen/value_40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="@dimen/value_20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/btn_convert_currency"
+                        android:layout_width="@dimen/value_40dp"
+                        android:layout_height="@dimen/value_40dp"
+                        android:background="@drawable/ic_swap_horiz"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </android.support.constraint.ConstraintLayout>
+
+            </android.support.constraint.ConstraintLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
