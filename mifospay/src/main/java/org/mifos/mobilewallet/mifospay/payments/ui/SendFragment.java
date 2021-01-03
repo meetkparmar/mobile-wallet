@@ -3,9 +3,7 @@ package org.mifos.mobilewallet.mifospay.payments.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -13,7 +11,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -38,11 +35,15 @@ import android.widget.Toast;
 import com.hbb20.CountryCodePicker;
 import com.mynameismidori.currencypicker.CurrencyPicker;
 import com.mynameismidori.currencypicker.CurrencyPickerListener;
-import com.mynameismidori.currencypicker.ExtendedCurrency;
 
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.CreditParty;
+import org.mifos.mobilewallet.core.domain.model.gsma.DebitParty;
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.InternationalTransferInformation;
+import org.mifos.mobilewallet.mifospay.MoneyTransfer;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -53,8 +54,8 @@ import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.util.ArrayList;
 import java.util.UUID;
-import java.util.function.Predicate;
 
 import javax.inject.Inject;
 
@@ -115,12 +116,22 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextView mEtAmountFrom;
     @BindView(R.id.et_amount_to)
     TextView mEtAmountTo;
+    @BindView(R.id.et_receiving_lei)
+    EditText mEtReceivingLei;
 
     private String vpa;
     private ProgressDialog progressDialog;
     private CurrencyConversionRequestBody currencyConversionRequestBody;
+    private IntTransferRequestBody intTransferRequestBody;
     private String countryFrom = "USD";
     private String countryTo = "INR";
+    private double currencyRate;
+    private String requestingLei;
+    private String receivingLei = "ibank-india";
+    private MoneyTransfer moneyTransfer;
+    private String userMobileNumber;
+    private String eamount;
+    private String mobileNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -137,7 +148,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
-        mBtnVpa.setSelected(true);
+        mBtnMobile.setSelected(true);
         progressDialog = new ProgressDialog(getContext());
 
         mAmountFromCurrencyCode.setText(countryFrom);
@@ -153,7 +164,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mCountryCodePicker.isValidFullNumber() || s.toString().equals("9999112")) {
                     showLoadingDialog("Loading...");
-                    mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber());
+                    mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber()+s);
                 }
             }
 
@@ -212,8 +223,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @OnClick(R.id.btn_submit)
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
-        String eamount = mEtAmountFrom.getText().toString().trim();
-        String mobileNumber = mEtMobileNumber.getText()
+        eamount = mEtAmountFrom.getText().toString().trim();
+        mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
                 (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
@@ -425,6 +436,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showMobile(String mobileNo) {
+        userMobileNumber = mobileNo;
     }
 
     @Override
@@ -432,21 +444,44 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mRlUserDetails.setVisibility(View.VISIBLE);
         hideLoadingDialog();
         tvName.setText(accountNameDetails.getName().getFullName());
-        byte[] decodedString = Base64.decode(accountNameDetails.getImage().split(",")[1], Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        ivUserImage.setImageBitmap(decodedByte);
+        if (accountNameDetails.getImage() != null){
+            byte[] decodedString = Base64.decode(accountNameDetails.getImage().split(",")[1], Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            ivUserImage.setImageBitmap(decodedByte);
+        }
+        requestingLei = accountNameDetails.getLei();
     }
 
     @Override
     public void showCurrencyConversionDetails(CurrencyConversionResponseBody currencyConversionResponseBody) {
         hideLoadingDialog();
         String convertedAmount = currencyConversionResponseBody.getConvertedAmount().toString();
+        currencyRate = currencyConversionResponseBody.getRate();
         mEtAmountTo.setText(convertedAmount);
     }
 
     @Override
-    public void showClientDetails(String externalId, double amount) {
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+    public void showClientDetails(String externalId, double amount, String mobileNumber) {
+
+        if (mAmountFromCurrencyCode.getText() == mAmountToCurrencyCode.getText()){
+            moneyTransfer = MoneyTransfer.DOMESTIC_MONEY_TRANSFER;
+        } else {
+            moneyTransfer = MoneyTransfer.INTERNATIONAL_MONEY_TRANSFER;
+            // receivingLei = mEtReceivingLei.getText().toString();
+            CreditParty creditParty = new CreditParty("msisdn", mCountryCodePicker.getFullNumber() + this.mobileNumber);
+            ArrayList<CreditParty> creditParties = new ArrayList<>();
+            creditParties.add(creditParty);// check mobile number
+            DebitParty debitParty = new DebitParty("msisdn", mobileNumber); // check mobile number
+            ArrayList<DebitParty> debitParties = new ArrayList<>();
+            debitParties.add(debitParty);// check mobile number
+            String currencyPair = mAmountFromCurrencyCode.getText().toString() + "/" + mAmountToCurrencyCode.getText().toString();
+            InternationalTransferInformation internationalTransferInformation = new InternationalTransferInformation(countryFrom, countryTo, countryTo,
+                    currencyPair, 0.013); // change currencyPairRate
+            intTransferRequestBody = new IntTransferRequestBody(eamount, "transfer", requestingLei, receivingLei,
+                    countryFrom, creditParties, debitParties, internationalTransferInformation);
+        }
+
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount, intTransferRequestBody, moneyTransfer);
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS);
         if (getParentFragment() != null) {
             fragment.show(getParentFragment().getChildFragmentManager(),

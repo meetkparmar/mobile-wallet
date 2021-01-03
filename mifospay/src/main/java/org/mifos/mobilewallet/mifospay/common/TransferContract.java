@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.common;
 
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
@@ -20,6 +22,8 @@ public interface TransferContract {
         void showVpaNotFoundSnackbar();
 
         void enableDragging(boolean enable);
+
+        void gsmaTransferResponse(IntTransferResponseBody intTransferResponseBody);
     }
 
     interface TransferPresenter extends BasePresenter {
@@ -27,6 +31,10 @@ public interface TransferContract {
         void fetchClient(String externalId);
 
         void makeTransfer(long fromClientId, long toClientId, double amount);
+
+        void intTransfer(IntTransferRequestBody intTransferRequestBody);
+
+        void getRequestState(String key);
     }
 
 }

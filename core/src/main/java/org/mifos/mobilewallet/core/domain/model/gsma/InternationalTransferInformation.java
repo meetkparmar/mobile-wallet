@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.core.domain.model.gsma;
 
-class InternationalTransferInformation {
+public class InternationalTransferInformation {
 
     private String originCountry;
     private String receivingCountry;

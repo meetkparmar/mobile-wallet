@@ -16,6 +16,9 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
+import org.mifos.mobilewallet.mifospay.MoneyTransfer;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
@@ -79,12 +82,16 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     private BottomSheetBehavior mBehavior;
     private long toClientId;
     private double amount;
+    private IntTransferRequestBody intTransferRequestBody;
+    private MoneyTransfer moneyTransfer;
 
-    public static MakeTransferFragment newInstance(String toExternalId, double amount) {
+    public static MakeTransferFragment newInstance(String toExternalId, double amount, IntTransferRequestBody intTransferRequestBody, MoneyTransfer moneyTranfer) {
 
         Bundle args = new Bundle();
         args.putString(Constants.TO_EXTERNAL_ID, toExternalId);
         args.putDouble(Constants.AMOUNT, amount);
+        args.putSerializable(Constants.INT_TRANSFER, intTransferRequestBody);
+        args.putSerializable(Constants.MONEY_TRANSFER, moneyTranfer);
         MakeTransferFragment fragment = new MakeTransferFragment();
         fragment.setArguments(args);
         return fragment;
@@ -114,6 +121,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         mPresenter.attachView(this);
 
         amount = getArguments().getDouble(Constants.AMOUNT);
+        intTransferRequestBody = (IntTransferRequestBody) getArguments().getSerializable(Constants.INT_TRANSFER);
+        moneyTransfer = (MoneyTransfer) getArguments().getSerializable(Constants.MONEY_TRANSFER);
 
         mTransferPresenter.fetchClient(getArguments().getString(Constants.TO_EXTERNAL_ID));
 
@@ -127,8 +136,11 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
-                        toClientId, amount);
+                if (moneyTransfer == MoneyTransfer.DOMESTIC_MONEY_TRANSFER) {
+                    mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(), toClientId, amount);
+                } else {
+                    mTransferPresenter.intTransfer(intTransferRequestBody);
+                }
                 TransitionManager.beginDelayedTransition(makeTransferContainer);
                 tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
@@ -201,6 +213,12 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
         });
+    }
+
+    @Override
+    public void gsmaTransferResponse(IntTransferResponseBody intTransferResponseBody) {
+        String transactionId = intTransferResponseBody.getTransactionId();
+        mTransferPresenter.getRequestState(transactionId);
     }
 
 }

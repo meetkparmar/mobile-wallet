@@ -29,6 +29,9 @@ import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
+import org.mifos.mobilewallet.core.domain.model.gsma.GsmaRequestStateResponseBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
+import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
 import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
 import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
@@ -276,5 +279,13 @@ public class FineractRepository {
 
     public Observable<CurrencyConversionResponseBody> currencyConvert(CurrencyConversionRequestBody currencyConversionRequestBody) {
         return financialApiManager.getFinancialServiceApi().currencyConvert(currencyConversionRequestBody);
+    }
+
+    public Observable<IntTransferResponseBody> gsmaTransfer(IntTransferRequestBody intTransferRequestBody) {
+        return financialApiManager.getFinancialServiceApi().gsmaTransfer(intTransferRequestBody);
+    }
+
+    public Observable<GsmaRequestStateResponseBody> gsmaRequestState(String key) {
+        return financialApiManager.getFinancialServiceApi().gsmaRequestState(key);
     }
 }

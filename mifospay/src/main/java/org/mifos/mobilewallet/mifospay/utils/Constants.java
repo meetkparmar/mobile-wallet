@@ -112,6 +112,8 @@ public class Constants {
     public static final String PENDING = "Pending";
     public static final String ITEMS = "Item(s)";
     public static final String AMOUNT = "Amount";
+    public static final String INT_TRANSFER = "IntTransfer";
+    public static final String MONEY_TRANSFER = "MoneyTransfer";
     public static final String INR = "INR";
     public static final String CONSUMER = "Consumer";
     public static final String MERCHANT = "Merchant";

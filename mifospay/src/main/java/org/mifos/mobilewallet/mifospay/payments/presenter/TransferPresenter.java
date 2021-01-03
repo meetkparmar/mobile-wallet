@@ -30,11 +30,10 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     FetchAccount mFetchAccount;
     @Inject
     FetchAccountName mFetchAccountName;
-    AccountNameDetails accountNameDetails;
-
     @Inject
     CurrencyConvert currencyConvert;
     CurrencyConversionResponseBody currencyConversionResponseBody;
+    AccountNameDetails accountNameDetails;
 
     private BaseHomeContract.TransferView mTransferView;
 
@@ -76,7 +75,8 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
                         if (transferAmount > response.getAccount().getBalance()) {
                             mTransferView.showSnackbar(Constants.INSUFFICIENT_BALANCE);
                         } else {
-                            mTransferView.showClientDetails(externalId, transferAmount);
+                            String mobileNumer = localRepository.getPreferencesHelper().getMobile();
+                            mTransferView.showClientDetails(externalId, transferAmount, mobileNumer);
                         }
                     }
 

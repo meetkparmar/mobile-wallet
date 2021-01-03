@@ -72,7 +72,7 @@ public interface BaseHomeContract {
 
         void hideSwipeProgress();
 
-        void showClientDetails(String externalId, double amount);
+        void showClientDetails(String externalId, double amount, String mobileNumber);
 
         void showAccountName(AccountNameDetails accountNameDetails);
 

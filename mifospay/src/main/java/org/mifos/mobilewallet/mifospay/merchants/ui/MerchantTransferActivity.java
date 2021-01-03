@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.mifospay.MoneyTransfer;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
@@ -156,7 +157,7 @@ public class MerchantTransferActivity extends BaseActivity implements
 
     @Override
     public void showPaymentDetails(String externalId, double amount) {
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount, null, MoneyTransfer.DOMESTIC_MONEY_TRANSFER);
         fragment.show(getSupportFragmentManager(), "tag");
     }
 
