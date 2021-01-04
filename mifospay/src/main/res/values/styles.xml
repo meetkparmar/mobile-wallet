@@ -41,7 +41,7 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:statusBarColor"
             tools:targetApi="lollipop">@color/colorPrimaryDark</item>
-        <item name="android:windowBackground">@drawable/splash_screen_background</item>
+        <item name="android:windowBackground">@drawable/login_page_logo</item>
     </style>
 
 </resources>

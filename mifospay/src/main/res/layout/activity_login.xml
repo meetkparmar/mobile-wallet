@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.774"
-        app:srcCompat="@drawable/ic_logo_outline" />
+        app:srcCompat="@drawable/login_page_logo" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout2"

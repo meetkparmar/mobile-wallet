@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mifos Pay</string>
+    <string name="app_name">IBank</string>
 
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
