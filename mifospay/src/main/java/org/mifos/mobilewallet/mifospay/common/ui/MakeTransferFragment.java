@@ -55,6 +55,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @BindView(R.id.btn_cancel)
     Button btnCancel;
 
+    @BindView(R.id.btn_exit)
+    Button btnExit;
+
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
@@ -72,6 +75,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @BindView(R.id.ll_content)
     View contentView;
+
+    @BindView(R.id.exit_content)
+    View exitView;
 
     @BindView(R.id.view_transfer_success)
     View viewTransferSuccess;
@@ -133,6 +139,13 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             }
         });
 
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
+            }
+        });
+
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +172,6 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
         tvClientVpa.setText(externalId);
-
         contentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
 
@@ -170,6 +182,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
         progressBar.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
+        exitView.setVisibility(View.VISIBLE);
+        btnExit.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -178,6 +192,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);
+        exitView.setVisibility(View.VISIBLE);
+        btnExit.setVisibility(View.VISIBLE);
     }
 
     @Override

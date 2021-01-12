@@ -110,6 +110,25 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/exit_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="bottom"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/btn_exit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@color/primaryDarkBlue"
+                android:text="@string/exit"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
         <View
             android:id="@+id/view_transfer_success"
             android:layout_width="130dp"
@@ -135,7 +154,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>
-
 
     </FrameLayout>
 

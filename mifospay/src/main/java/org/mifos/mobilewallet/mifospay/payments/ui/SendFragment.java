@@ -116,8 +116,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextView mEtAmountFrom;
     @BindView(R.id.et_amount_to)
     TextView mEtAmountTo;
-    @BindView(R.id.et_receiving_lei)
-    EditText mEtReceivingLei;
 
     private String vpa;
     private ProgressDialog progressDialog;
@@ -153,7 +151,13 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
         mAmountFromCurrencyCode.setText(countryFrom);
         mAmountToCurrencyCode.setText(countryTo);
+        mEtAmountFrom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEtAmountTo.setText("0");
+            }
 
+        });
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -162,9 +166,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (mCountryCodePicker.isValidFullNumber() || s.toString().equals("9999112")) {
-                    showLoadingDialog("Loading...");
-                    mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber()+s);
+                if (s.length()>7) {
+                    if (mCountryCodePicker.isValidFullNumber() || s.toString().equals("9738700217")) {
+                        showLoadingDialog("Loading...");
+                        mTransferPresenter.getAccountName("MSISDN", "+" + mCountryCodePicker.getFullNumber() + s);
+                    }
                 }
             }
 
@@ -367,7 +373,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                         ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 phoneNo = cursor.getString(phoneIndex);
                 name = cursor.getString(nameIndex);
-
+                phoneNo = phoneNo.replace(" ", "");
                 mEtMobileNumber.setText(phoneNo);
 
             } catch (Exception e) {
@@ -467,7 +473,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             moneyTransfer = MoneyTransfer.DOMESTIC_MONEY_TRANSFER;
         } else {
             moneyTransfer = MoneyTransfer.INTERNATIONAL_MONEY_TRANSFER;
-            // receivingLei = mEtReceivingLei.getText().toString();
             CreditParty creditParty = new CreditParty("msisdn", mCountryCodePicker.getFullNumber() + this.mobileNumber);
             ArrayList<CreditParty> creditParties = new ArrayList<>();
             creditParties.add(creditParty);// check mobile number

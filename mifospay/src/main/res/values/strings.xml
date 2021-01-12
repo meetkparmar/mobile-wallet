@@ -274,4 +274,6 @@
     <string name="fetching_history">Fetching History...</string>
     <string name="requesting_lei">Requesting LEI</string>
     <string name="receiving_lei">Receiving LEI</string>
+    <string name="convert">Convert</string>
+    <string name="exit">Exit</string>
 </resources>

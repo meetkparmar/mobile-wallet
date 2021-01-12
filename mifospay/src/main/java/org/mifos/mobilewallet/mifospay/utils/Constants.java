@@ -14,7 +14,7 @@ public class Constants {
     public static final String ACCOUNT_ID = "account_id";
     public static final String ACCOUNT = "account";
     public static final String TO_EXTERNAL_ID = "to_external_id";
-    public static final String RUPEE = "₹";
+    public static final String RUPEE = "$";
     public static final String QR_DATA = "qr_data";
     public static final String MERCHANT_NAME = "merchant_name";
     public static final String MERCHANT_VPA = "merchant_vpa";
