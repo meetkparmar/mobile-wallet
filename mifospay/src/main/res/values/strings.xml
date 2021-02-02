@@ -223,11 +223,14 @@
 
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
+    <string name="empty_no_transaction_statement_title">Your Statement is empty</string>
     <string name="nothing_in_invoices">Nothing in Invoices</string>
     <string name="select_transfer_method">Select transfer method</string>
     <string name="empty_no_transaction_history_subtitle">Every completed transaction will be displaying here</string>
+    <string name="empty_no_transaction_statement_subtitle">Every completed transaction will be displaying here</string>
     <string name="error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="error_no_statement_subtitle">Couldn\'t fetch transactions statements. Please, try again.</string>
     <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
     <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
     <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
@@ -274,6 +277,7 @@
     <string name="fetching_history">Fetching History...</string>
     <string name="requesting_lei">Requesting LEI</string>
     <string name="receiving_lei">Receiving LEI</string>
-    <string name="convert">Convert</string>
+    <string name="convert">Get Quote</string>
     <string name="exit">Exit</string>
+    <string name="statement">Statement</string>
 </resources>

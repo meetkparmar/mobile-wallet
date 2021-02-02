@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -87,9 +88,12 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     private Account account;
 
+    private AccountBalance mAccountBalance;
+
     private BottomSheetBehavior mBottomSheetBehavior;
 
     private String accountBalance;
+    private String balance;
 
     public static HomeFragment newInstance(long clientId) {
 
@@ -121,13 +125,14 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
         showSwipeProgress();
         mHomePresenter.fetchAccountDetails();
+        mHomePresenter.fetchAccountBalance();
 
         mTvAccountBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mTvAccountBalance.getText().toString().equals(Constants.TAP_TO_REVEAL)) {
                     TransitionManager.beginDelayedTransition(homeScreenContainer);
-                    mTvAccountBalance.setText(accountBalance);
+                    mTvAccountBalance.setText(balance);
                     tvHideBalance.setVisibility(View.VISIBLE);
                 }
             }
@@ -218,6 +223,23 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
                 getFormattedAccountBalance(account.getBalance(), currencyCode);
         hideSwipeProgress();
 
+        TransitionManager.beginDelayedTransition(homeScreenContainer);
+        mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+        tvHideBalance.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void setBalance(AccountBalance accountBalance) {
+        this.mAccountBalance = accountBalance;
+
+        String currencyCode = accountBalance.getCurrency();
+        hideSwipeProgress();
+        if (currencyCode.equals("USD")) {
+            balance = "$ " + mAccountBalance.getCurrentBalance();
+        } else {
+            balance = "₹ " + mAccountBalance.getCurrentBalance();
+        }
+        hideSwipeProgress();
         TransitionManager.beginDelayedTransition(homeScreenContainer);
         mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
         tvHideBalance.setVisibility(View.INVISIBLE);

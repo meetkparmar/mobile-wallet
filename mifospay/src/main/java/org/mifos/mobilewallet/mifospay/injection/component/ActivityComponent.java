@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.injection.component;
 
 
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchStatement;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.bank.fragment.DebitCardFragment;
 import org.mifos.mobilewallet.mifospay.bank.fragment.OtpFragment;
@@ -41,6 +42,7 @@ import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivit
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
 import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
+import org.mifos.mobilewallet.mifospay.statement.ui.StatementFragment;
 
 import dagger.Component;
 
@@ -125,4 +127,6 @@ public interface ActivityComponent {
     void inject(NotificationActivity notificationActivity);
 
     void inject(MerchantTransferActivity merchantTransferActivity);
+
+    void inject(StatementFragment statementFragment);
 }

@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
+import org.mifos.mobilewallet.mifospay.statement.ui.StatementFragment;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import butterknife.BindView;
@@ -77,7 +78,8 @@ public class PaymentsFragment extends BaseFragment {
                 = new TabLayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
         tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
-        tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
+        tabLayoutAdapter.addFragment(new StatementFragment(), getString(R.string.statement));
+//        tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
         tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));
         vpTabLayout.setAdapter(tabLayoutAdapter);
     }

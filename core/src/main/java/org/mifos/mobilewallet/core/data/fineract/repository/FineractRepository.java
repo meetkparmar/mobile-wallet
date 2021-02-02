@@ -23,11 +23,13 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
+import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
+import org.mifos.mobilewallet.core.domain.model.Statement;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
 import org.mifos.mobilewallet.core.domain.model.gsma.GsmaRequestStateResponseBody;
 import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
@@ -287,5 +289,13 @@ public class FineractRepository {
 
     public Observable<GsmaRequestStateResponseBody> gsmaRequestState(String key) {
         return financialApiManager.getFinancialServiceApi().gsmaRequestState(key);
+    }
+
+    public Observable<AccountBalance> getAccountBalance(String mobileNo) {
+        return financialApiManager.getFinancialServiceApi().getAccountBalance(mobileNo);
+    }
+
+    public Observable<List<Statement>> getStatement(String mobileNo) {
+        return financialApiManager.getFinancialServiceApi().getStatements(mobileNo);
     }
 }

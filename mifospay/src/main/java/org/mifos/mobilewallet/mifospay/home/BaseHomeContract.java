@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
@@ -35,6 +36,8 @@ public interface BaseHomeContract {
 
         void setAccountBalance(Account account);
 
+        void setBalance(AccountBalance accountBalance);
+
         void showTransactionsHistory(List<Transaction> transactions);
 
         void showTransactionsError();
@@ -55,6 +58,8 @@ public interface BaseHomeContract {
     interface HomePresenter extends BasePresenter {
 
         void fetchAccountDetails();
+
+        void fetchAccountBalance();
 
         void showMoreHistory(int existingItemsCount);
 

@@ -1,11 +1,15 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
+import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
+import org.mifos.mobilewallet.core.domain.model.Statement;
 import org.mifos.mobilewallet.core.domain.model.gsma.GsmaRequestStateResponseBody;
 import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
 import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
+
+import java.util.List;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -19,6 +23,16 @@ public interface FinancialService {
     Observable<AccountNameDetails> getAccountName(
             @Path("identifierType") String identifierType,
             @Path("identifier") String identifier
+    );
+
+    @GET("accounts/MSISDN/{mobileNo}/balance")
+    Observable<AccountBalance> getAccountBalance(
+            @Path("mobileNo") String mobileNo
+    );
+
+    @GET("gsma/accounts/MSISDN/{mobileNo}/statemententries")
+    Observable<List<Statement>> getStatements(
+            @Path("mobileNo") String mobileNo
     );
 
     @POST("imuConversion/preview")

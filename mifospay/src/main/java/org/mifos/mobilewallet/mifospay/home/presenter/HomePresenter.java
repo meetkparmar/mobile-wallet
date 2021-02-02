@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountBalance;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -30,6 +31,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private final LocalRepository localRepository;
     @Inject
     FetchAccount mFetchAccountUseCase;
+    @Inject
+    FetchAccountBalance mFetchAccountBalanceUseCase;
     @Inject
     FetchAccountTransactions fetchAccountTransactionsUseCase;
     @Inject
@@ -67,6 +70,30 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                         preferencesHelper.setAccountId(response.getAccount().getId());
                         mHomeView.setAccountBalance(response.getAccount());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
+                        mHomeView.hideSwipeProgress();
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mHomeView.hideBottomSheetActionButton();
+                        mHomeView.showTransactionsError();
+                        mHomeView.showToast(message);
+                        mHomeView.hideSwipeProgress();
+                        mHomeView.hideTransactionLoading();
+                    }
+                });
+    }
+
+    @Override
+    public void fetchAccountBalance() {
+//        String mobileNo = "+" + localRepository.getPreferencesHelper().getMobile();
+        String mobileNo = "+919900878571";
+        mUsecaseHandler.execute(mFetchAccountBalanceUseCase,
+                new FetchAccountBalance.RequestValues(mobileNo),
+                new UseCase.UseCaseCallback<FetchAccountBalance.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchAccountBalance.ResponseValue response) {
+                        mHomeView.setBalance(response.getAccountBalance());
                         mHomeView.hideSwipeProgress();
                     }
 
