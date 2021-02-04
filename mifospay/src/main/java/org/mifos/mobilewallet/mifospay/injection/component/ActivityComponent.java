@@ -12,6 +12,7 @@ import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
+import org.mifos.mobilewallet.mifospay.deposit.ui.DepositFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
@@ -129,4 +130,6 @@ public interface ActivityComponent {
     void inject(MerchantTransferActivity merchantTransferActivity);
 
     void inject(StatementFragment statementFragment);
+
+    void inject(DepositFragment depositFragment);
 }

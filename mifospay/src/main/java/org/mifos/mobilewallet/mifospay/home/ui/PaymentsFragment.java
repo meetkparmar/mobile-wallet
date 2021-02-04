@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.deposit.ui.DepositFragment;
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
@@ -78,6 +79,7 @@ public class PaymentsFragment extends BaseFragment {
                 = new TabLayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
         tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
+        tabLayoutAdapter.addFragment(new DepositFragment(), getString(R.string.deposit));
         tabLayoutAdapter.addFragment(new StatementFragment(), getString(R.string.statement));
 //        tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
         tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));

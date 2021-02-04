@@ -4,6 +4,8 @@ import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
+import org.mifos.mobilewallet.core.domain.model.DepositRequestBody;
+import org.mifos.mobilewallet.core.domain.model.DepositResponseBody;
 import org.mifos.mobilewallet.core.domain.model.Statement;
 import org.mifos.mobilewallet.core.domain.model.gsma.GsmaRequestStateResponseBody;
 import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferRequestBody;
@@ -33,6 +35,11 @@ public interface FinancialService {
     @GET("gsma/accounts/MSISDN/{mobileNo}/statemententries")
     Observable<List<Statement>> getStatements(
             @Path("mobileNo") String mobileNo
+    );
+
+    @POST("deposit")
+    Observable<DepositResponseBody> depositMoney(
+            @Body DepositRequestBody depositRequestBody
     );
 
     @POST("imuConversion/preview")

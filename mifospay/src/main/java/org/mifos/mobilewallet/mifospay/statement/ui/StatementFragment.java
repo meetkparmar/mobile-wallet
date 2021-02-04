@@ -110,6 +110,9 @@ public class StatementFragment extends BaseFragment implements StatementContract
 
     @Override
     public void showStateView(int drawable, int title, int subtitle) {
+        setSwipeEnabled(false);
+        hideSwipeProgress();
+
         TransitionManager.beginDelayedTransition(statementContainer);
         rvStatement.setVisibility(View.GONE);
         pbStatement.setVisibility(View.GONE);
@@ -127,6 +130,9 @@ public class StatementFragment extends BaseFragment implements StatementContract
 
     @Override
     public void showStatements(List<Statement> statements) {
+        setSwipeEnabled(false);
+        hideSwipeProgress();
+
         if (statements == null) {
             Toaster.showToast(getContext(), Constants.ERROR_FETCHING_TRANSACTION_DETAILS);
         } else {

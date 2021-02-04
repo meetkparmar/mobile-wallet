@@ -95,6 +95,8 @@ public class Constants {
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";
     public static final String DEBIT = "Debit";
+    public static final String WITHDRAWAL = "Withdrawal";
+    public static final String DEPOSIT = "Deposit";
     public static final String TO = "to";
     public static final String FROM = "from";
     public static final String RECEIPT_ID = "Receipt ID";

@@ -47,7 +47,7 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.View
         Long amount = statement.getAmount();
         String currencyCode = statement.getCurrency();
         holder.tvAmount.setText(getFormattedAccountBalance((double)amount, currencyCode));
-        holder.tvSubtitle.setText(statement.getStatus());
+//        holder.tvSubtitle.setText(statement.getStatus());
 
         if (amount > 0 && context != null) {
             int color = ContextCompat.getColor(context, R.color.colorAccentBlue);
@@ -56,16 +56,17 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.View
 
         String strDate = statement.getStartedAt();
 
-        String[] date = strDate.split("T");
-        holder.tvDate.setText(date[0]);
+        String[] date = strDate.split("\\.");
+        String[] dateTime = date[0].split("T");
+        holder.tvDate.setText(String.format("%s %s", dateTime[0], dateTime[1]));
 
         switch (statement.getDirection()) {
             case "OUTGOING":
-                holder.tvTitle.setText(Constants.DEBIT);
+                holder.tvTitle.setText(Constants.WITHDRAWAL);
                 holder.ivIcon.setImageResource(R.drawable.cashout);
                 break;
             case "INCOMING":
-                holder.tvTitle.setText(Constants.CREDIT);
+                holder.tvTitle.setText(Constants.DEPOSIT);
                 holder.ivIcon.setImageResource(R.drawable.cashin);
                 break;
         }
@@ -105,8 +106,8 @@ public class StatementAdapter extends RecyclerView.Adapter<StatementAdapter.View
         @BindView(R.id.tv_title)
         TextView tvTitle;
 
-        @BindView(R.id.tv_subtitle)
-        TextView tvSubtitle;
+//        @BindView(R.id.tv_subtitle)
+//        TextView tvSubtitle;
 
         @BindView(R.id.tv_amount)
         TextView tvAmount;

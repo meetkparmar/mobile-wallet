@@ -27,6 +27,8 @@ import org.mifos.mobilewallet.core.domain.model.AccountBalance;
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
+import org.mifos.mobilewallet.core.domain.model.DepositRequestBody;
+import org.mifos.mobilewallet.core.domain.model.DepositResponseBody;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.Statement;
@@ -297,5 +299,9 @@ public class FineractRepository {
 
     public Observable<List<Statement>> getStatement(String mobileNo) {
         return financialApiManager.getFinancialServiceApi().getStatements(mobileNo);
+    }
+
+    public Observable<DepositResponseBody> depositMoney(DepositRequestBody depositRequestBody) {
+        return financialApiManager.getFinancialServiceApi().depositMoney(depositRequestBody);
     }
 }

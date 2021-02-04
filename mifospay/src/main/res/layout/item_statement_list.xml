@@ -38,15 +38,15 @@
         app:layout_constraintStart_toEndOf="@+id/iv_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_subtitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="COMPLETED"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/colorTextSecondary"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+<!--    <TextView-->
+<!--        android:id="@+id/tv_subtitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="COMPLETED"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:textColor="@color/colorTextSecondary"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/tv_title"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/tv_title" />-->
 
     <TextView
         android:id="@+id/tv_formatted_date"
@@ -55,8 +55,8 @@
         android:text="Date"
         android:layout_marginTop="4dp"
         android:textColor="@color/colorTextSecondary"
-        app:layout_constraintStart_toStartOf="@+id/tv_subtitle"
-        app:layout_constraintTop_toBottomOf="@+id/tv_subtitle" />
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <TextView
         android:id="@+id/tv_amount"

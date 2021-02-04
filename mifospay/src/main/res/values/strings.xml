@@ -42,6 +42,8 @@
     <string name="show_more">Show more</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
+    <string name="deposit">Deposit</string>
+    <string name="back">Back</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
     <string name="complete_kyc">Complete the KYC process</string>
@@ -280,4 +282,6 @@
     <string name="convert">Get Quote</string>
     <string name="exit">Exit</string>
     <string name="statement">Statement</string>
+    <string name="description">Description</string>
+    <string name="txn_ref_id">Transaction Id:</string>
 </resources>
