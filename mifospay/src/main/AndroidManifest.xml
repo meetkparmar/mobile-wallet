@@ -142,6 +142,9 @@
         <activity
             android:name=".password.ui.EditPasswordActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".createuser.ui.DemoLoginActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

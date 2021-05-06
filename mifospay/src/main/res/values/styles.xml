@@ -44,4 +44,9 @@
         <item name="android:windowBackground">@drawable/login_page_logo</item>
     </style>
 
+    <style name="AppTheme.Button.LightBlue" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/color_states_materialbutton</item>
+        <item name="cornerRadius">32dp</item>
+    </style>
+
 </resources>

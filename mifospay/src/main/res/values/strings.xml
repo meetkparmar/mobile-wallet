@@ -284,4 +284,7 @@
     <string name="statement">Statement</string>
     <string name="description">Description</string>
     <string name="txn_ref_id">Transaction Id:</string>
+    <string name="date_of_birth_with_formate">Date of Birth (DD/MM/YYYY)</string>
+    <string name="user">User </string>
+    <string name="details">Details</string>
 </resources>

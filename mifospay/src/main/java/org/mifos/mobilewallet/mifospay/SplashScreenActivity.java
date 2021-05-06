@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.DemoLoginActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -18,7 +19,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         new Handler().postDelayed(new Runnable() {
             public void run() {
-                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+//                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
+                startActivity(new Intent(SplashScreenActivity.this, DemoLoginActivity.class));
                 finish();
             }
         }, splashScreenDuration);
