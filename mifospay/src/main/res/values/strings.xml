@@ -287,4 +287,10 @@
     <string name="date_of_birth_with_formate">Date of Birth (DD/MM/YYYY)</string>
     <string name="user">User </string>
     <string name="details">Details</string>
+    <string name="locate">Locate</string>
+    <string name="search_your_location_here">Search your location here</string>
+    <string name="global">Global</string>
+    <string name="anywhere">Bank Anywhere</string>
+    <string name="truly_free">Truly Free</string>
+    <string name="start">Start</string>
 </resources>

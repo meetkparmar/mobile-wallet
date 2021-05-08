@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/round_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_7" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_8" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_9" />
+
+    <ImageView
+        android:id="@+id/round_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_4" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_6" />
+
+    <ImageView
+        android:layout_width="329dp"
+        android:layout_height="0dp"
+        android:src="@drawable/global"
+        app:layout_constraintBottom_toTopOf="@id/round_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/round_top" />
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        android:gravity="end"
+        android:text="@string/global"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_sub_tile"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sub_tile"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        android:gravity="end"
+        android:text="I BANK IS A GLOBAL FINANCE NETWORK THAT COMBINES THE CONVINENCE OF A PREPAID DEBIT CARD WITH THE ROBUST FEATURES AND BENIFITS OF AN ONLINE BANK."
+        app:layout_constraintBottom_toTopOf="@id/round_bottom"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/rectangle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_16dp"
+        android:layout_marginEnd="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_16dp"
+        app:layout_constraintEnd_toStartOf="@id/rectangle_2"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub_tile"
+        app:srcCompat="@drawable/ic_rectangle_19" />
+
+    <ImageView
+        android:id="@+id/rectangle_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_16dp"
+        android:layout_marginEnd="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_16dp"
+        app:layout_constraintEnd_toStartOf="@id/rectangle_3"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub_tile"
+        app:srcCompat="@drawable/ic_rectangle_18" />
+
+    <ImageView
+        android:id="@+id/rectangle_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_16dp"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_sub_tile"
+        app:srcCompat="@drawable/ic_rectangle_18" />
+
+
+</android.support.constraint.ConstraintLayout>

@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MifosPayApp"
@@ -17,31 +19,36 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
 
-	<activity
-            android:name=".SplashScreenActivity">
-<!--            android:theme="@style/SplashTheme"-->
+        <activity android:name=".SplashScreenActivity">
+            <!--            android:theme="@style/SplashTheme"-->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-	<activity
+
+        <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".home.ui.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".qr.ui.ShowQrActivity"
             android:theme="@style/AppTheme" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="org.mifos.mobilewallet.mifospay.provider"
@@ -51,6 +58,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />
@@ -59,8 +67,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -74,8 +82,8 @@
         </activity>
         <activity
             android:name=".invoice.ui.InvoiceActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -144,6 +152,12 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".createuser.ui.DemoLoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".createuser.ui.LocationActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".createuser.ui.OnBoardingActivity"
             android:theme="@style/AppTheme" />
     </application>
 

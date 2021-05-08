@@ -12,6 +12,9 @@ android {
         applicationId "org.mifos.mobilewallet.mifospay"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+
+        multiDexEnabled true
+
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -99,6 +102,12 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
     implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
+
+    implementation 'com.android.support:multidex:1.0.3'
+
+    implementation 'com.google.android.gms:play-services-maps:16.0.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

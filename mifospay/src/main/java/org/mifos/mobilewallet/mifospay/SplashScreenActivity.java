@@ -5,8 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
-import org.mifos.mobilewallet.mifospay.createuser.ui.DemoLoginActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.OnBoardingActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
@@ -20,7 +19,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             public void run() {
 //                startActivity(new Intent(SplashScreenActivity.this, LoginActivity.class));
-                startActivity(new Intent(SplashScreenActivity.this, DemoLoginActivity.class));
+                startActivity(new Intent(SplashScreenActivity.this, OnBoardingActivity.class));
                 finish();
             }
         }, splashScreenDuration);

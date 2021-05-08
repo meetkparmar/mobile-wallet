@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/round_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_10" />
+
+    <ImageView
+        android:id="@+id/round_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_10__1_" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_11" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_ellipse_12" />
+
+    <ImageView
+        android:layout_width="329dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/value_50dp"
+        android:src="@drawable/anywhere"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/round_top"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        style="@style/TextAppearance.MaterialComponents.Headline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        android:gravity="end"
+        android:text="@string/anywhere"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/tv_sub_tile"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_sub_tile"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        android:layout_marginBottom="@dimen/value_16dp"
+        android:gravity="end"
+        android:text="True convenience: Banking at your favorite store. And shopping at millions of stores that accept mastercard."
+        app:layout_constraintBottom_toTopOf="@id/rectangle_1"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/rectangle_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_50dp"
+        android:layout_marginEnd="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_16dp"
+        android:layout_marginBottom="@dimen/value_16dp"
+        app:layout_constraintBottom_toTopOf="@id/round_bottom"
+        app:layout_constraintEnd_toStartOf="@id/rectangle_2"
+        app:srcCompat="@drawable/ic_rectangle_18" />
+
+    <ImageView
+        android:id="@+id/rectangle_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_50dp"
+        android:layout_marginEnd="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_16dp"
+        android:layout_marginBottom="@dimen/value_16dp"
+        app:layout_constraintBottom_toTopOf="@id/round_bottom"
+        app:layout_constraintEnd_toStartOf="@id/rectangle_3"
+        app:srcCompat="@drawable/ic_rectangle_19" />
+
+    <ImageView
+        android:id="@+id/rectangle_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_50dp"
+        android:layout_marginEnd="@dimen/value_50dp"
+        android:layout_marginRight="@dimen/value_50dp"
+        android:layout_marginBottom="@dimen/value_16dp"
+        app:layout_constraintBottom_toTopOf="@id/round_bottom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_rectangle_18" />
+
+
+</android.support.constraint.ConstraintLayout>
