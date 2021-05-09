@@ -19,9 +19,7 @@
         android:layout_width="125dp"
         android:layout_height="48dp"
         android:layout_marginTop="@dimen/value_40dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginRight="35dp"
-        android:src="@drawable/login_page_logo"
+        android:src="@drawable/small_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

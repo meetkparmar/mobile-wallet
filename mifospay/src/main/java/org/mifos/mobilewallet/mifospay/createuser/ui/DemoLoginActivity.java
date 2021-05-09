@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.createuser.ui;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -9,22 +10,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.createuser.model.LoginDetails;
+import org.mifos.mobilewallet.mifospay.createuser.contract.CreateClientContract;
+import org.mifos.mobilewallet.mifospay.createuser.presenter.CreateClientPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
-public class DemoLoginActivity extends BaseActivity {
+public class DemoLoginActivity extends BaseActivity implements CreateClientContract.CreateClientView {
+
+    @Inject
+    CreateClientPresenter mPresenter;
+
+    CreateClientContract.CreateClientPresenter mCreateClientPresenter;
 
     @BindView(R.id.et_first_name)
     EditText etFirstName;
@@ -48,7 +61,12 @@ public class DemoLoginActivity extends BaseActivity {
     Button btnLogin;
 
     final Calendar myCalendar = Calendar.getInstance();
-
+    private ProgressDialog progressDialog;
+    private CreateClientRequestBody createClientRequestBody;
+    private String dateFormat = "dd MMMM yyyy";
+    private String locale = "en";
+    private Boolean active = true;
+    private String formattedDate = "";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +74,8 @@ public class DemoLoginActivity extends BaseActivity {
         getActivityComponent().inject(this);
         setContentView(R.layout.demo_activity_login);
         ButterKnife.bind(this);
+        mPresenter.attachView(this);
+        progressDialog = new ProgressDialog(this);
 
         etFirstName.addTextChangedListener(textWatcher);
         etLastName.addTextChangedListener(textWatcher);
@@ -82,21 +102,40 @@ public class DemoLoginActivity extends BaseActivity {
     }
 
     private void submitDetails() {
-            LoginDetails loginDetails = new LoginDetails();
-            loginDetails.setFirstName(etFirstName.getText().toString());
-            loginDetails.setLastName(etLastName.getText().toString());
-            loginDetails.setEmail(etEmail.getText().toString());
-            loginDetails.setDateOfBirth(etDateOfBirth.getText().toString());
-            loginDetails.setMobileNumber(ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString());
+        createClientRequestBody = new CreateClientRequestBody(
+                etFirstName.getText().toString(),
+                etLastName.getText().toString(),
+                ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString(),
+                formattedDate,
+                currentDate(),
+                currentDate(),
+                dateFormat,
+                locale,
+                active,
+                1,
+                1,
+                1,
+                new ArrayList<String>(),
+                new ArrayList<String>()
+        );
+        showLoadingDialog("Loading...");
+        mCreateClientPresenter.createClient(createClientRequestBody);
+    }
+
+    private String currentDate() {
+        return new SimpleDateFormat(dateFormat).format(Calendar.getInstance().getTime());
+
     }
 
     TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
         }
+
         @Override
         public void afterTextChanged(Editable s) {
             if (!etFirstName.getText().toString().equals("") && !etLastName.getText().toString().equals("") && !etMobileNumber.getText().toString().equals("")
@@ -125,7 +164,38 @@ public class DemoLoginActivity extends BaseActivity {
     private void updateLabel() {
         String myFormat = "MM/dd/yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
+        SimpleDateFormat sdf2 = new SimpleDateFormat(dateFormat, Locale.US);
+        formattedDate = sdf2.format(myCalendar.getTime());
         etDateOfBirth.setText(sdf.format(myCalendar.getTime()));
+    }
+
+    @Override
+    public void showToast(String message) {
+        hideLoadingDialog();
+        Toaster.showToast(this, message);
+    }
+
+    @Override
+    public void showCreateClientResult(CreateClientResponseBody createClientResponseBody) {
+        hideLoadingDialog();
+        Toast.makeText(this, "New Client Created", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void setPresenter(CreateClientContract.CreateClientPresenter presenter) {
+        mCreateClientPresenter = presenter;
+    }
+
+    private void showLoadingDialog(String message) {
+        if (!progressDialog.isShowing()) {
+            progressDialog.setMessage(message);
+            progressDialog.show();
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
     }
 }

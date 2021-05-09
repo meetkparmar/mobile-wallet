@@ -4,6 +4,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.FinancialApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
+import org.mifos.mobilewallet.core.data.fineract.api.UsPfFinancialApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
@@ -39,6 +40,8 @@ import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
 import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
 import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 import org.mifos.mobilewallet.core.utils.Constants;
@@ -63,12 +66,14 @@ public class FineractRepository {
     private final FineractApiManager fineractApiManager;
     private final SelfServiceApiManager selfApiManager;
     private final FinancialApiManager financialApiManager;
+    private final UsPfFinancialApiManager usPfFinancialApiManager;
 
     @Inject
     public FineractRepository(FineractApiManager fineractApiManager) {
         this.fineractApiManager = fineractApiManager;
         this.selfApiManager = FineractApiManager.getSelfApiManager();
         this.financialApiManager = FineractApiManager.getsFinanceInstance();
+        this.usPfFinancialApiManager = FineractApiManager.getUsPfFinanceInstance();
     }
 
     public Observable<CreateClient.ResponseValue> createClient(NewClient newClient) {
@@ -303,5 +308,9 @@ public class FineractRepository {
 
     public Observable<DepositResponseBody> depositMoney(DepositRequestBody depositRequestBody) {
         return financialApiManager.getFinancialServiceApi().depositMoney(depositRequestBody);
+    }
+
+    public Observable<CreateClientResponseBody> createClient(CreateClientRequestBody createClientRequestBody) {
+        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createClient(createClientRequestBody);
     }
 }

@@ -19,6 +19,9 @@ public class BaseURL {
     //ibank financial url
     public static final String API_ENDPOINT_FINANCIAL = "channel.ibank.financial/channel/";
 
+    //us-pf-ibank financial url
+    public static final String API_ENDPOINT_US_PF_FINANCIAL = "us-pf.ibank.financial";
+
     public String getUrl() {
         return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
 
@@ -30,5 +33,9 @@ public class BaseURL {
 
     public String getFinancialUrl() {
         return PROTOCOL_HTTP + API_ENDPOINT_FINANCIAL; //+ API_PATH_FINANCIAL;
+    }
+
+    public String getUsPfFinancialUrl() {
+        return PROTOCOL_HTTP + API_ENDPOINT_US_PF_FINANCIAL + API_PATH;
     }
 }
