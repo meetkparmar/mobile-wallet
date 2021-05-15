@@ -159,6 +159,9 @@
         <activity
             android:name=".createuser.ui.OnBoardingActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".createuser.ui.KycActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

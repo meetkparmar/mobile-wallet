@@ -18,7 +18,7 @@ public class CreateClientRequestBody {
     private int legalFormId;
     private int officeId = 1;
     private List<String> address = new ArrayList<>();
-    private List<String> familyMembers;
+    private List<String> familyMembers = new ArrayList<>();
 
     public CreateClientRequestBody(String firstname, String lastname, String mobileNo, String dateOfBirth, String submittedOnDate, String activationDate, String dateFormat, String locale, Boolean active, int savingsProductId, int legalFormId, int officeId, List<String> address, List<String> familyMembers) {
         this.firstname = firstname;

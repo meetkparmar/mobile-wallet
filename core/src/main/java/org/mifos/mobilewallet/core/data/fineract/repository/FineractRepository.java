@@ -42,6 +42,9 @@ import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.IdentifierTemplateResponseBody;
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 import org.mifos.mobilewallet.core.utils.Constants;
@@ -312,5 +315,13 @@ public class FineractRepository {
 
     public Observable<CreateClientResponseBody> createClient(CreateClientRequestBody createClientRequestBody) {
         return usPfFinancialApiManager.getUsPfFinancialServiceApi().createClient(createClientRequestBody);
+    }
+
+    public Observable<CreateUserResponseBody> createUserForUsPf(CreateUserRequestBody createUserRequestBody) {
+        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createUser(createUserRequestBody);
+    }
+
+    public Observable<IdentifierTemplateResponseBody> fetchIdentifierTemplate(int clientId) {
+        return usPfFinancialApiManager.getUsPfFinancialServiceApi().fetchIdentifierTemplate(clientId);
     }
 }

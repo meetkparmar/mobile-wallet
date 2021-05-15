@@ -1,0 +1,12 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <corners android:radius="90dp" />
+            <solid android:color="@color/clickedblue"/>
+        </shape>
+    </item>
+
+    <item android:drawable="@drawable/ic_add_grey"
+        >
+    </item>
+</layer-list>

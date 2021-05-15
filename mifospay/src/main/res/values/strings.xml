@@ -293,4 +293,11 @@
     <string name="anywhere">Bank Anywhere</string>
     <string name="truly_free">Truly Free</string>
     <string name="start">Start</string>
+    <string name="text_upload_file">Tap to upload your file</string>
+    <string name="text_document_name">Tax/Drivers/Visa Number</string>
+    <string name="text_upload_document">Upload any 2 of the following Documents</string>
+    <string name="sub_text_upload_document">Tax Documents | Drivers Lcense | Visa Documents</string>
+    <string name="click_here">Click Here</string>
+    <string name="social_security_number">Social Security Number</string>
+    <string name="dont_have_social_security_number">Dont have a Social Security Number?</string>
 </resources>

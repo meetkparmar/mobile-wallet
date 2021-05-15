@@ -36,6 +36,6 @@ public class BaseURL {
     }
 
     public String getUsPfFinancialUrl() {
-        return PROTOCOL_HTTP + API_ENDPOINT_US_PF_FINANCIAL + API_PATH;
+        return PROTOCOL_HTTPS + API_ENDPOINT_US_PF_FINANCIAL + API_PATH;
     }
 }

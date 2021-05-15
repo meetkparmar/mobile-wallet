@@ -5,6 +5,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import org.mifos.mobilewallet.mifospay.createuser.ui.DemoLoginActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.KycActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.OnBoardingActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {

@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.createuser.ui;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -16,6 +17,8 @@ import com.hbb20.CountryCodePicker;
 
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.createuser.contract.CreateClientContract;
@@ -24,6 +27,7 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -63,6 +67,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     final Calendar myCalendar = Calendar.getInstance();
     private ProgressDialog progressDialog;
     private CreateClientRequestBody createClientRequestBody;
+    private CreateUserRequestBody createUserRequestBody;
     private String dateFormat = "dd MMMM yyyy";
     private String locale = "en";
     private Boolean active = true;
@@ -178,7 +183,25 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     @Override
     public void showCreateClientResult(CreateClientResponseBody createClientResponseBody) {
         hideLoadingDialog();
-        Toast.makeText(this, "New Client Created", Toast.LENGTH_SHORT).show();
+        createUserRequestBody = new CreateUserRequestBody(
+                etFirstName.getText().toString() + etLastName.getText().toString(),
+                etFirstName.getText().toString(),
+                etLastName.getText().toString(),
+                etEmail.getText().toString(),
+                false,
+                1,
+                Arrays.asList(1),
+                "password",
+                "password"
+        );
+        showLoadingDialog("Loading...");
+        mCreateClientPresenter.createUser(createUserRequestBody);
+    }
+
+    @Override
+    public void showCreateUserResult(CreateUserResponseBody createUserResponseBody) {
+        Intent intent = new Intent(this, KycActivity.class);
+
     }
 
     @Override
