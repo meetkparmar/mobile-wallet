@@ -72,6 +72,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     private String locale = "en";
     private Boolean active = true;
     private String formattedDate = "";
+    private int clientId = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -183,6 +184,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     @Override
     public void showCreateClientResult(CreateClientResponseBody createClientResponseBody) {
         hideLoadingDialog();
+        clientId = createClientResponseBody.getClientId();
         createUserRequestBody = new CreateUserRequestBody(
                 etFirstName.getText().toString() + etLastName.getText().toString(),
                 etFirstName.getText().toString(),
@@ -200,8 +202,10 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
 
     @Override
     public void showCreateUserResult(CreateUserResponseBody createUserResponseBody) {
+        hideLoadingDialog();
         Intent intent = new Intent(this, KycActivity.class);
-
+        intent.putExtra(KycActivity.CLIENT_ID, clientId);
+        startActivity(intent);
     }
 
     @Override

@@ -2,13 +2,22 @@ package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.IdentifierTemplateResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.UploadDocumentResponseBody;
 
+import java.util.Map;
+
+import okhttp3.MultipartBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import rx.Observable;
 
@@ -28,4 +37,19 @@ public interface UsPfFinancialService {
     Observable<IdentifierTemplateResponseBody> fetchIdentifierTemplate(
             @Path("clientId") int clientId
     );
+
+    @POST("clients/{clientId}/identifiers")
+    Observable<CreateIdentifierResponseBody> createIdentifier(
+            @Body CreateIdentifierRequestBody createIdentifierRequestBody,
+            @Path("clientId") int clientId
+    );
+
+    @Multipart
+    @POST("{entityType}/{entityId}/documents")
+    Observable<UploadDocumentResponseBody> uploadDocument(
+            @Path("entityType") String entityType,
+            @Path("clientId") int clientId,
+            @PartMap Map<String, String> map,
+            @Part MultipartBody.Part file
+            );
 }

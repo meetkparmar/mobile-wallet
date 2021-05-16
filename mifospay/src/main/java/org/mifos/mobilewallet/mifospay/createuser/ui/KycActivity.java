@@ -12,22 +12,31 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.DocumentTypes;
 import org.mifos.mobilewallet.core.domain.model.uspf.IdentifierTemplateResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.UploadDocumentResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.createuser.adapter.IdentifierAdapter;
+import org.mifos.mobilewallet.mifospay.createuser.adapter.ItemClicked;
 import org.mifos.mobilewallet.mifospay.createuser.contract.KycContract;
 import org.mifos.mobilewallet.mifospay.createuser.presenter.KycPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -37,27 +46,14 @@ import butterknife.ButterKnife;
 
 public class KycActivity extends BaseActivity implements KycContract.KycView {
 
-    private static final int REQUEST_READ_IMAGE_FOR_1 = 1;
-    private static final int REQUEST_READ_IMAGE_FOR_2 = 2;
-    private static final int REQUEST_READ_IMAGE_FOR_3 = 3;
+    private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
+    public static final String CLIENT_ID = "client_id";
 
     @Inject
     KycPresenter mPresenter;
 
     KycContract.KycPresenter mKycPresenter;
-
-    @BindView(R.id.et_upload_doc1)
-    EditText etUploadDoc1;
-
-    @BindView(R.id.et_upload_doc2)
-    EditText etUploadDoc2;
-
-    @BindView(R.id.et_doc_number_1)
-    EditText etDocNumber1;
-
-    @BindView(R.id.et_doc_number_2)
-    EditText etDocNumber2;
 
     @BindView(R.id.et_social_security_number)
     EditText etSSNumber;
@@ -68,8 +64,14 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
     @BindView(R.id.tv_click_here)
     TextView tvClickHere;
 
+    @BindView(R.id.sub_text)
+    TextView tvSubText;
+
     @BindView(R.id.btn_submit)
     Button btnSubmit;
+
+    @BindView(R.id.btn_submit2)
+    Button btnSubmit2;
 
     @BindView(R.id.other_document_layout)
     ConstraintLayout otherDocumentLayout;
@@ -77,11 +79,21 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
     @BindView(R.id.social_security_document_layout)
     ConstraintLayout ssDocumentLayout;
 
+    @BindView(R.id.rv_identifier)
+    RecyclerView rvIdentifier;
+
+    IdentifierAdapter identifierAdapter;
+
     String fileName;
-    int clientId;
+    int clientId = 25;
     int layoutState = 1;
     private ProgressDialog progressDialog;
-    private List<DocumentTypes> documentTypes;
+    private List<DocumentTypes> documentTypes = new ArrayList<>();
+    private List<DocumentTypes> listDocumentOption = new ArrayList<>();
+    private int itemPosition = -1;
+    private int count = 0;
+    File firstFile;
+    private ArrayList<Integer> positionList = new ArrayList<>();
 
     @Override
     public void setPresenter(KycContract.KycPresenter presenter) {
@@ -95,11 +107,13 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
         setContentView(R.layout.activity_kyc);
         ButterKnife.bind(this);
 
+        clientId = getIntent().getIntExtra(CLIENT_ID, clientId);
+
         mPresenter.attachView(this);
         progressDialog = new ProgressDialog(this);
-
+        setupRecyclerView();
         showLoadingDialog("Loading...");
-        mKycPresenter.fetchIdentifierTemplate(23);
+        mKycPresenter.fetchIdentifierTemplate(clientId);
 
         tvClickHere.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,49 +126,52 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
 
         etSSNumber.addTextChangedListener(textWatcher);
         etSSDocument.addTextChangedListener(textWatcher);
-        etDocNumber1.addTextChangedListener(textWatcher);
-        etDocNumber2.addTextChangedListener(textWatcher);
-        etUploadDoc1.addTextChangedListener(textWatcher);
-        etUploadDoc2.addTextChangedListener(textWatcher);
 
         etSSDocument.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickImageFromGallery(1);
-            }
-        });
-
-        etUploadDoc1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickImageFromGallery(2);
-            }
-        });
-
-        etUploadDoc2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickImageFromGallery(3);
+                pickImageFromGallery();
             }
         });
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (layoutState == 1) {
-                    if(etSSNumber.getText().toString().isEmpty() || etSSDocument.getText().toString().isEmpty()) {
-                        showToast("Please fill all the details");
-                    } else {
-
-                    }
+                if(etSSNumber.getText().toString().isEmpty() || etSSDocument.getText().toString().isEmpty()) {
+                    showToast("Please fill all the details");
                 } else {
-                    if(etDocNumber1.getText().toString().isEmpty() || etDocNumber2.getText().toString().isEmpty() ||
-                       etUploadDoc1.getText().toString().isEmpty() || etUploadDoc2.getText().toString().isEmpty()) {
-                        showToast("Please fill all the details");
-                    } else {
+                    CreateIdentifierRequestBody createIdentifierRequestBody = new CreateIdentifierRequestBody(
+                            Integer.toString(documentTypes.get(0).getId()),
+                        etSSNumber.getText().toString(),
+                        "Active",
+                        ""
+                    );
+                    mKycPresenter.createIdentifier(createIdentifierRequestBody, clientId);
+                }
+            }
+        });
 
+        btnSubmit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int index=0; index<listDocumentOption.size(); index++) {
+                    int c = 0;
+                    if (listDocumentOption.get(index).getDocumentImage() != null && listDocumentOption.get(index).getDocumentNumber() != null) {
+                        positionList.add(index);
+                        c++;
+                    }
+                    if (c==2) {
+                        break;
                     }
                 }
+                CreateIdentifierRequestBody createIdentifierRequestBody = new CreateIdentifierRequestBody(
+                        Integer.toString(listDocumentOption.get(positionList.get(0)).getId()),
+                        documentTypes.get(positionList.get(0)).getName(),
+                        "Active",
+                        ""
+                );
+                mKycPresenter.createIdentifier(createIdentifierRequestBody, clientId);
+
             }
         });
 
@@ -171,23 +188,12 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (layoutState == 1) {
-                if (!etSSNumber.getText().toString().equals("") && !etSSDocument.getText().toString().equals("")) {
-                    btnSubmit.setEnabled(true);
-                    btnSubmit.setClickable(true);
-                } else {
-                    btnSubmit.setEnabled(false);
-                    btnSubmit.setClickable(false);
-                }
+            if (!etSSNumber.getText().toString().equals("") && !etSSDocument.getText().toString().equals("")) {
+                btnSubmit.setEnabled(true);
+                btnSubmit.setClickable(true);
             } else {
-                if (!etDocNumber1.getText().toString().equals("") && !etDocNumber2.getText().toString().equals("")
-                        && etUploadDoc1.getText().toString().equals("") && !etUploadDoc2.getText().toString().equals("")) {
-                    btnSubmit.setEnabled(true);
-                    btnSubmit.setClickable(true);
-                } else {
-                    btnSubmit.setEnabled(false);
-                    btnSubmit.setClickable(false);
-                }
+                btnSubmit.setEnabled(false);
+                btnSubmit.setClickable(false);
             }
         }
     };
@@ -198,26 +204,39 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_READ_IMAGE_FOR_1 && data != null) {
-                Uri selectedImageUri = data.getData();
-                if (selectedImageUri != null) {
-                    setFileName(selectedImageUri, 1);
-                }
-            } else if (requestCode == REQUEST_READ_IMAGE_FOR_2 && data != null) {
-                Uri selectedImageUri = data.getData();
-                if (selectedImageUri != null) {
-                    setFileName(selectedImageUri, 2);
-                }
-            } else if (requestCode == REQUEST_READ_IMAGE_FOR_3 && data != null) {
-                Uri selectedImageUri = data.getData();
-                if (selectedImageUri != null) {
-                    setFileName(selectedImageUri, 3);
+            if (requestCode == REQUEST_READ_IMAGE && data != null) {
+                Uri firstImageUri = data.getData();
+                if (firstImageUri != null) {
+                    firstFile = new File(firstImageUri.getPath());
+                    if (itemPosition >= 0) {
+                        listDocumentOption.get(itemPosition).setDocumentImage(setFileName(firstImageUri));
+                        listDocumentOption.get(itemPosition).setFile(firstImageUri.toString());
+                        identifierAdapter.setIdentifier(itemPosition, listDocumentOption.get(itemPosition));
+                        count++;
+                    } else {
+                        etSSDocument.setText(setFileName(firstImageUri));
+                    }
                 }
             }
         }
     }
 
-    private void setFileName(Uri selectedImageUri, int docNumber) {
+    private void setupRecyclerView() {
+        identifierAdapter = new IdentifierAdapter(new ItemClicked() {
+            @Override
+            public void onClickedListener(int position) {
+                pickImageFromGallery();
+                itemPosition = position;
+            }
+        });
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rvIdentifier.setLayoutManager(layoutManager);
+        rvIdentifier.setHasFixedSize(true);
+        rvIdentifier.setAdapter(identifierAdapter);
+    }
+
+    private String setFileName(Uri selectedImageUri) {
         String scheme = selectedImageUri.getScheme();
         if (scheme.equals("file")) {
             fileName = selectedImageUri.getLastPathSegment();
@@ -227,23 +246,16 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
             if (cursor != null && cursor.getCount() != 0) {
                 int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.TITLE);
                 cursor.moveToFirst();
-                fileName = cursor.getString(columnIndex);
-                if (docNumber == 1) {
-                    etSSDocument.setText(fileName + ".jpg");
-                } else if (docNumber == 2) {
-                    etUploadDoc1.setText(fileName + ".jpg");
-                } else {
-                    etUploadDoc2.setText(fileName + ".jpg");
-                }
-                etSSDocument.setText(fileName + ".jpg");
+                return cursor.getString(columnIndex);
             }
             if (cursor != null) {
                 cursor.close();
             }
         }
+        return null;
     }
 
-    private void pickImageFromGallery(int docNumber) {
+    private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
@@ -254,13 +266,7 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
                 String[] mimeTypes = {"image/jpeg", "image/png"};
                 galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
             }
-            if (docNumber == 1) {
-                startActivityForResult(galleryIntent, REQUEST_READ_IMAGE_FOR_1);
-            } else if (docNumber == 2) {
-                startActivityForResult(galleryIntent, REQUEST_READ_IMAGE_FOR_2);
-            } else {
-                startActivityForResult(galleryIntent, REQUEST_READ_IMAGE_FOR_3);
-            }
+            startActivityForResult(galleryIntent, REQUEST_READ_IMAGE);
         }
     }
 
@@ -272,9 +278,39 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
 
     @Override
     public void showKycTemplateResult(IdentifierTemplateResponseBody identifierTemplateResponseBody) {
-        showToast("Success");
-
+        hideLoadingDialog();
         documentTypes = identifierTemplateResponseBody.getAllowedDocumentTypes();
+        setFirstDocument();
+        setIdentifierTemplate();
+    }
+
+    private void setFirstDocument() {
+        etSSNumber.setHint(documentTypes.get(0).getName() + " Number");
+    }
+
+    private void setIdentifierTemplate() {
+        listDocumentOption.clear();
+        StringBuilder sub_text = new StringBuilder();
+        for (int index=1; index < documentTypes.size(); index++){
+            sub_text.append(documentTypes.get(index).getName()).append(" |");
+            listDocumentOption.add(documentTypes.get(index));
+        }
+        tvSubText.setText(sub_text);
+        identifierAdapter.setData(listDocumentOption);
+    }
+
+    @Override
+    public void createIdentifierResult(CreateIdentifierResponseBody createIdentifierResponseBody) {
+        hideLoadingDialog();
+        HashMap<String, String> partMap = new HashMap<>();
+        partMap.put("name", documentTypes.get(0).getName());
+        partMap.put("description", " ");
+        mKycPresenter.uploadDocument(partMap, firstFile, clientId);
+    }
+
+    @Override
+    public void uploadDocumentResult(UploadDocumentResponseBody uploadDocumentResponseBody) {
+
     }
 
     private void showLoadingDialog(String message) {

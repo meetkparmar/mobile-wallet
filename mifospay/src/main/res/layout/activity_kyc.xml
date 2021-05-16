@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -25,6 +26,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/iv_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/visa_card"
@@ -36,9 +38,8 @@
         android:id="@+id/social_security_document_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/value_16dp"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/btn_submit">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <EditText
             android:id="@+id/et_social_security_number"
@@ -79,6 +80,7 @@
             android:layout_marginStart="35dp"
             android:layout_marginTop="@dimen/value_16dp"
             android:layout_marginEnd="35dp"
+            android:layout_marginBottom="@dimen/value_16dp"
             android:layout_weight="1"
             android:clickable="false"
             android:drawableEnd="@drawable/bg_add_document"
@@ -86,28 +88,42 @@
             android:focusable="false"
             android:hint="@string/text_upload_file"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toTopOf="@id/btn_submit" />
+
+        <Button
+            android:id="@+id/btn_submit"
+            style="@style/AppTheme.Button.LightBlue"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_margin="35dp"
+            android:clickable="false"
+            android:enabled="false"
+            android:text="@string/submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/other_document_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/value_16dp"
+        android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/btn_submit">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_card">
 
         <TextView
+            android:id="@+id/tv_upload_text"
             style="@style/TextAppearance.AppCompat.Body1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
             android:text="@string/text_upload_document"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/sub_text"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/sub_text"
@@ -116,80 +132,34 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginLeft="35dp"
-            android:layout_marginBottom="@dimen/value_16dp"
             android:text="@string/sub_text_upload_document"
             android:textColor="@color/gray_6"
-            app:layout_constraintBottom_toTopOf="@id/et_doc_number_1"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_upload_text" />
 
-        <EditText
-            android:id="@+id/et_doc_number_1"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_identifier"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:hint="@string/text_document_name"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/et_upload_doc1" />
+            android:layout_marginTop="@dimen/value_16dp"
+            android:clipToPadding="false"
+            android:scrollbars="vertical"
+            app:layout_constraintTop_toBottomOf="@id/sub_text"
+            tools:listitem="@layout/item_identifier_list" />
 
-        <EditText
-            android:id="@+id/et_upload_doc1"
+        <Button
+            android:id="@+id/btn_submit2"
+            style="@style/AppTheme.Button.LightBlue"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="35dp"
             android:layout_marginEnd="35dp"
-            android:layout_marginBottom="@dimen/value_16dp"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:drawableEnd="@drawable/bg_add_document"
-            android:drawableRight="@drawable/bg_add_document"
-            android:focusable="false"
-            android:hint="@string/text_upload_file"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/et_doc_number_2" />
-
-        <EditText
-            android:id="@+id/et_doc_number_2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:hint="@string/text_document_name"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/et_upload_doc2" />
-
-        <EditText
-            android:id="@+id/et_upload_doc2"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp"
-            android:layout_weight="1"
-            android:clickable="false"
-            android:drawableEnd="@drawable/bg_add_document"
-            android:drawableRight="@drawable/bg_add_document"
-            android:focusable="false"
-            android:hint="@string/text_upload_file"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:layout_marginBottom="35dp"
+            android:text="@string/submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_identifier" />
 
     </android.support.constraint.ConstraintLayout>
-
-    <Button
-        android:id="@+id/btn_submit"
-        style="@style/AppTheme.Button.LightBlue"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_margin="35dp"
-        android:clickable="false"
-        android:enabled="false"
-        android:text="@string/submit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

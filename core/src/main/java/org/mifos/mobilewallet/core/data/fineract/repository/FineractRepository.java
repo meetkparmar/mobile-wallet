@@ -42,20 +42,29 @@ import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.IdentifierTemplateResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.UploadDocumentResponseBody;
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 import org.mifos.mobilewallet.core.utils.Constants;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.MediaType;
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import okio.BufferedSink;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -323,5 +332,18 @@ public class FineractRepository {
 
     public Observable<IdentifierTemplateResponseBody> fetchIdentifierTemplate(int clientId) {
         return usPfFinancialApiManager.getUsPfFinancialServiceApi().fetchIdentifierTemplate(clientId);
+    }
+
+    public Observable<CreateIdentifierResponseBody> createIdentifier(CreateIdentifierRequestBody createIdentifierRequestBody, int clientId) {
+        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createIdentifier(createIdentifierRequestBody, clientId);
+    }
+
+    public Observable<UploadDocumentResponseBody> uploadDocument(Map<String, String> partMap, File file, int clientId) {
+        return usPfFinancialApiManager.getUsPfFinancialServiceApi().uploadDocument("client_identifiers", clientId, partMap, getRequestFileBody(file));
+    }
+
+    private MultipartBody.Part getRequestFileBody(File file) {
+        RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
 }

@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.core.domain.model.uspf;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.File;
+
 public class DocumentTypes implements Parcelable {
 
     public static final Parcelable.Creator<DocumentTypes> CREATOR = new Parcelable.Creator<DocumentTypes>() {
@@ -22,6 +24,17 @@ public class DocumentTypes implements Parcelable {
     private int position;
     private Boolean active;
     private Boolean mandatory;
+    private String documentNumber;
+    private String documentImage;
+    private String file;
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
 
     public DocumentTypes(Parcel in) {
         this.id = in.readInt();
@@ -29,6 +42,25 @@ public class DocumentTypes implements Parcelable {
         this.position = in.readInt();
         this.active = in.readByte() != 0;
         this.mandatory = in.readByte() != 0;
+        this.documentNumber = in.readString();
+        this.documentImage = in.readString();
+        this.file = in.readString();
+    }
+
+    public String getDocumentNumber() {
+        return documentNumber;
+    }
+
+    public void setDocumentNumber(String documentNumber) {
+        this.documentNumber = documentNumber;
+    }
+
+    public String getDocumentImage() {
+        return documentImage;
+    }
+
+    public void setDocumentImage(String documentImage) {
+        this.documentImage = documentImage;
     }
 
     public int getId() {
@@ -83,5 +115,8 @@ public class DocumentTypes implements Parcelable {
         dest.writeInt(this.position);
         dest.writeByte((byte) (active ? 1 : 0));
         dest.writeByte((byte) (mandatory ? 1 : 0));
+        dest.writeString(this.documentNumber);
+        dest.writeString(this.documentImage);
+        dest.writeString(this.file);
     }
 }
