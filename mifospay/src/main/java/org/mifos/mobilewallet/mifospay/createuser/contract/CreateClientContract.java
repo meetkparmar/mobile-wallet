@@ -20,7 +20,7 @@ public interface CreateClientContract {
 
     interface CreateClientPresenter extends BasePresenter {
 
-        void createClient(CreateClientRequestBody createClientRequestBody);
+        void createClient(CreateClientRequestBody createClientRequestBody, String name, String mobileNo);
 
         void createUser(CreateUserRequestBody createUserRequestBody);
     }

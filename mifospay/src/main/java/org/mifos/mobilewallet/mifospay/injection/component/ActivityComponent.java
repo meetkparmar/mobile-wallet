@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.DemoLoginActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.KycActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.LocationActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.LoginCompleteActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.OnBoardingActivity;
 import org.mifos.mobilewallet.mifospay.deposit.ui.DepositFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
@@ -144,4 +145,6 @@ public interface ActivityComponent {
     void inject(OnBoardingActivity onBoardingActivity);
 
     void inject(KycActivity kycActivity);
+
+    void inject(LoginCompleteActivity loginCompleteActivity);
 }

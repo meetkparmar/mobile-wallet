@@ -48,7 +48,7 @@ public interface UsPfFinancialService {
     @POST("{entityType}/{entityId}/documents")
     Observable<UploadDocumentResponseBody> uploadDocument(
             @Path("entityType") String entityType,
-            @Path("clientId") int clientId,
+            @Path("entityId") int clientId,
             @PartMap Map<String, String> map,
             @Part MultipartBody.Part file
             );

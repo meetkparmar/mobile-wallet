@@ -7,9 +7,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.mifos.mobile.passcode.utils.PassCodeConstants;
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
+
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.createuser.adapter.SlideAdapter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +37,11 @@ public class OnBoardingActivity extends BaseActivity implements ViewPager.OnPage
         setContentView(R.layout.activity_on_boarding);
         ButterKnife.bind(this);
 
+        PasscodePreferencesHelper pref = new PasscodePreferencesHelper(getApplicationContext());
+        if (!pref.getPassCode().isEmpty()) {
+            startPassCodeActivity();
+        }
+
         slideAdapter = new SlideAdapter(this);
         mSlideViewPager.setAdapter(slideAdapter);
 
@@ -43,6 +53,12 @@ public class OnBoardingActivity extends BaseActivity implements ViewPager.OnPage
                 openActivity();
             }
         });
+    }
+
+    private void startPassCodeActivity() {
+        Intent intent = new Intent(this, PassCodeActivity.class);
+        intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
+        startActivity(intent);
     }
 
     @Override

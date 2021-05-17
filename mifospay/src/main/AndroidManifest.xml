@@ -162,6 +162,9 @@
         <activity
             android:name=".createuser.ui.KycActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".createuser.ui.LoginCompleteActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

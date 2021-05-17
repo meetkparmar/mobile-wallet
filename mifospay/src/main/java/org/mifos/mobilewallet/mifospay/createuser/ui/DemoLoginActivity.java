@@ -11,10 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.hbb20.CountryCodePicker;
 
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
@@ -42,6 +43,9 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     CreateClientPresenter mPresenter;
 
     CreateClientContract.CreateClientPresenter mCreateClientPresenter;
+
+    @BindView(R.id.iv_back_arrow)
+    ImageView ivBackArrow;
 
     @BindView(R.id.et_first_name)
     EditText etFirstName;
@@ -89,6 +93,13 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         etDateOfBirth.addTextChangedListener(textWatcher);
         etEmail.addTextChangedListener(textWatcher);
 
+        ivBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         etDateOfBirth.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -125,7 +136,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
                 new ArrayList<String>()
         );
         showLoadingDialog("Loading...");
-        mCreateClientPresenter.createClient(createClientRequestBody);
+        mCreateClientPresenter.createClient(createClientRequestBody, etFirstName.getText().toString(), ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString());
     }
 
     private String currentDate() {
@@ -196,6 +207,12 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
                 "password",
                 "password"
         );
+
+        Client client = new Client();
+        client.setClientId(clientId);
+        client.setDisplayName(etFirstName.getText().toString() + etLastName.getText().toString());
+        client.setMobileNo(etMobileNumber.getText().toString());
+        client.setName(etFirstName.getText().toString());
         showLoadingDialog("Loading...");
         mCreateClientPresenter.createUser(createUserRequestBody);
     }

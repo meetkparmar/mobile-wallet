@@ -10,7 +10,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
@@ -28,6 +31,7 @@ import org.mifos.mobilewallet.core.domain.model.uspf.IdentifierTemplateResponseB
 import org.mifos.mobilewallet.core.domain.model.uspf.UploadDocumentResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.createuser.FilePath;
 import org.mifos.mobilewallet.mifospay.createuser.adapter.IdentifierAdapter;
 import org.mifos.mobilewallet.mifospay.createuser.adapter.ItemClicked;
 import org.mifos.mobilewallet.mifospay.createuser.contract.KycContract;
@@ -54,6 +58,12 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
     KycPresenter mPresenter;
 
     KycContract.KycPresenter mKycPresenter;
+
+    @BindView(R.id.iv_back_arrow)
+    ImageView ivBackArrow;
+
+    @BindView(R.id.iv_card)
+    ImageView ivCard;
 
     @BindView(R.id.et_social_security_number)
     EditText etSSNumber;
@@ -84,15 +94,15 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
 
     IdentifierAdapter identifierAdapter;
 
-    String fileName;
-    int clientId = 25;
+    private String fileName;
+    int clientId = -1;
     int layoutState = 1;
     private ProgressDialog progressDialog;
     private List<DocumentTypes> documentTypes = new ArrayList<>();
     private List<DocumentTypes> listDocumentOption = new ArrayList<>();
     private int itemPosition = -1;
+    private File firstFile;
     private int count = 0;
-    File firstFile;
     private ArrayList<Integer> positionList = new ArrayList<>();
 
     @Override
@@ -124,6 +134,23 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
             }
         });
 
+        ivBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ssDocumentLayout.setVisibility(View.VISIBLE);
+                otherDocumentLayout.setVisibility(View.GONE);
+                layoutState = 1;
+            }
+        });
+
+        ivCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openBottomSheet();
+            }
+        });
+
+
         etSSNumber.addTextChangedListener(textWatcher);
         etSSDocument.addTextChangedListener(textWatcher);
 
@@ -146,6 +173,7 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
                         "Active",
                         ""
                     );
+                    showLoadingDialog("Loading ..");
                     mKycPresenter.createIdentifier(createIdentifierRequestBody, clientId);
                 }
             }
@@ -170,6 +198,7 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
                         "Active",
                         ""
                 );
+                showLoadingDialog("Loading ..");
                 mKycPresenter.createIdentifier(createIdentifierRequestBody, clientId);
 
             }
@@ -199,6 +228,7 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -207,12 +237,18 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
             if (requestCode == REQUEST_READ_IMAGE && data != null) {
                 Uri firstImageUri = data.getData();
                 if (firstImageUri != null) {
-                    firstFile = new File(firstImageUri.getPath());
+                    try {
+                        String selectedFilePath = FilePath.getPath(this, firstImageUri);
+                        firstFile = new File(selectedFilePath);
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
                     if (itemPosition >= 0) {
                         listDocumentOption.get(itemPosition).setDocumentImage(setFileName(firstImageUri));
                         listDocumentOption.get(itemPosition).setFile(firstImageUri.toString());
                         identifierAdapter.setIdentifier(itemPosition, listDocumentOption.get(itemPosition));
-                        count++;
                     } else {
                         etSSDocument.setText(setFileName(firstImageUri));
                     }
@@ -234,6 +270,13 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
         rvIdentifier.setLayoutManager(layoutManager);
         rvIdentifier.setHasFixedSize(true);
         rvIdentifier.setAdapter(identifierAdapter);
+    }
+
+    private void openBottomSheet() {
+        BottomSheetDialog dialog = new BottomSheetDialog(this);
+        View view = this.getLayoutInflater().inflate(R.layout.card_info_bottom_sheet, null);
+        dialog.setContentView(view);
+        dialog.show();
     }
 
     private String setFileName(Uri selectedImageUri) {
@@ -305,12 +348,27 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
         HashMap<String, String> partMap = new HashMap<>();
         partMap.put("name", documentTypes.get(0).getName());
         partMap.put("description", " ");
+        showLoadingDialog("Loading ..");
         mKycPresenter.uploadDocument(partMap, firstFile, clientId);
     }
 
     @Override
     public void uploadDocumentResult(UploadDocumentResponseBody uploadDocumentResponseBody) {
-
+        hideLoadingDialog();
+        count++;
+        if (layoutState == 2 && count == 1) {
+            CreateIdentifierRequestBody createIdentifierRequestBody = new CreateIdentifierRequestBody(
+                    Integer.toString(listDocumentOption.get(positionList.get(1)).getId()),
+                    documentTypes.get(positionList.get(0)).getName(),
+                    "Active",
+                    ""
+            );
+            showLoadingDialog("Loading ..");
+            mKycPresenter.createIdentifier(createIdentifierRequestBody, clientId);
+        } else {
+            Intent intent = new Intent(this, LoginCompleteActivity.class);
+            startActivity(intent);
+        }
     }
 
     private void showLoadingDialog(String message) {
