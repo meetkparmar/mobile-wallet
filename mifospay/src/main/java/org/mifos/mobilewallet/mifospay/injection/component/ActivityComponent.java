@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.injection.component;
 
 
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchStatement;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.bank.fragment.DebitCardFragment;
 import org.mifos.mobilewallet.mifospay.bank.fragment.OtpFragment;
@@ -16,6 +15,7 @@ import org.mifos.mobilewallet.mifospay.createuser.ui.DemoLoginActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.KycActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.LoginCompleteActivity;
+import org.mifos.mobilewallet.mifospay.createuser.ui.MerchantLocationActivity;
 import org.mifos.mobilewallet.mifospay.createuser.ui.OnBoardingActivity;
 import org.mifos.mobilewallet.mifospay.deposit.ui.DepositFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
@@ -147,4 +147,6 @@ public interface ActivityComponent {
     void inject(KycActivity kycActivity);
 
     void inject(LoginCompleteActivity loginCompleteActivity);
+
+    void inject(MerchantLocationActivity merchantLocationActivity);
 }

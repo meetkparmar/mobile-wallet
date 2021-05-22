@@ -65,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/value_50dp"
         android:layout_marginRight="@dimen/value_50dp"
+        android:layout_marginBottom="8dp"
         android:gravity="end"
         android:text="@string/global"
         android:textAllCaps="true"
@@ -80,7 +81,7 @@
         android:layout_marginEnd="@dimen/value_50dp"
         android:layout_marginRight="@dimen/value_50dp"
         android:gravity="end"
-        android:text="I BANK IS A GLOBAL FINANCE NETWORK THAT COMBINES THE CONVINENCE OF A PREPAID DEBIT CARD WITH THE ROBUST FEATURES AND BENIFITS OF AN ONLINE BANK."
+        android:text="@string/global_sub_text"
         app:layout_constraintBottom_toTopOf="@id/round_bottom"
         app:layout_constraintEnd_toEndOf="parent" />
 

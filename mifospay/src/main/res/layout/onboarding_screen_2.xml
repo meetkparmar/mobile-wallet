@@ -68,7 +68,7 @@
         android:layout_marginRight="@dimen/value_50dp"
         android:layout_marginBottom="@dimen/value_16dp"
         android:gravity="end"
-        android:text="True convenience: Banking at your favorite store. And shopping at millions of stores that accept mastercard."
+        android:text="@string/bank_anywhere_sub_text"
         app:layout_constraintBottom_toTopOf="@id/rectangle_1"
         app:layout_constraintEnd_toEndOf="parent" />
 

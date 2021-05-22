@@ -23,12 +23,12 @@ public class BaseURL {
     public static final String API_ENDPOINT_US_PF_FINANCIAL = "us-pf.ibank.financial";
 
     public String getUrl() {
-        return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
+        return PROTOCOL_HTTPS + API_ENDPOINT_US_PF_FINANCIAL + API_PATH;
 
     }
 
     public String getSelfServiceUrl() {
-        return PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF;
+        return PROTOCOL_HTTPS + API_ENDPOINT_US_PF_FINANCIAL + API_PATH_SELF;
     }
 
     public String getFinancialUrl() {

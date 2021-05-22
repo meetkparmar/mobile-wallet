@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.hbb20.CountryCodePicker;
 
 import org.mifos.mobilewallet.core.domain.model.client.Client;
+import org.mifos.mobilewallet.core.domain.model.uspf.ClientAddress;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateUserRequestBody;
@@ -24,12 +25,14 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.createuser.contract.CreateClientContract;
 import org.mifos.mobilewallet.mifospay.createuser.presenter.CreateClientPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -77,6 +80,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     private Boolean active = true;
     private String formattedDate = "";
     private int clientId = -1;
+    private ClientAddress clientAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,6 +90,8 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         ButterKnife.bind(this);
         mPresenter.attachView(this);
         progressDialog = new ProgressDialog(this);
+
+        clientAddress = (ClientAddress) getIntent().getSerializableExtra(Constants.ADDRESS);
 
         etFirstName.addTextChangedListener(textWatcher);
         etLastName.addTextChangedListener(textWatcher);
@@ -119,6 +125,8 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     }
 
     private void submitDetails() {
+        List<ClientAddress> addresses = new ArrayList<>();
+        addresses.add(clientAddress);
         createClientRequestBody = new CreateClientRequestBody(
                 etFirstName.getText().toString(),
                 etLastName.getText().toString(),
@@ -132,7 +140,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
                 1,
                 1,
                 1,
-                new ArrayList<String>(),
+                addresses,
                 new ArrayList<String>()
         );
         showLoadingDialog("Loading...");
@@ -197,7 +205,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         hideLoadingDialog();
         clientId = createClientResponseBody.getClientId();
         createUserRequestBody = new CreateUserRequestBody(
-                etFirstName.getText().toString() + etLastName.getText().toString(),
+                etEmail.getText().toString(),
                 etFirstName.getText().toString(),
                 etLastName.getText().toString(),
                 etEmail.getText().toString(),
@@ -223,6 +231,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         Intent intent = new Intent(this, KycActivity.class);
         intent.putExtra(KycActivity.CLIENT_ID, clientId);
         startActivity(intent);
+        finish();
     }
 
     @Override

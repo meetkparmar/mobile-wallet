@@ -26,7 +26,7 @@ public class CreateClientPresenter implements CreateClientContract.CreateClientP
     CreateUser createUser;
 
     private final UseCaseHandler mUseCaseHandler;
-    private final PreferencesHelper mPreferencesHelper;
+    private final PreferencesHelper preferencesHelper;
     private LocalRepository localRepository;
     private CreateClientContract.CreateClientView mCreateClientView;
     CreateClientResponseBody createClientResponseBody;
@@ -35,7 +35,7 @@ public class CreateClientPresenter implements CreateClientContract.CreateClientP
     @Inject
     public CreateClientPresenter(UseCaseHandler mUseCaseHandler, PreferencesHelper mPreferencesHelper, LocalRepository localRepository) {
         this.mUseCaseHandler = mUseCaseHandler;
-        this.mPreferencesHelper = mPreferencesHelper;
+        this.preferencesHelper = mPreferencesHelper;
         this.localRepository = localRepository;
     }
 
@@ -47,7 +47,9 @@ public class CreateClientPresenter implements CreateClientContract.CreateClientP
                     @Override
                     public void onSuccess(CreateClient.ResponseValue response) {
                         createClientResponseBody = response.getCreateClientResponseBody();
-
+                        preferencesHelper.saveFullName(name);
+                        preferencesHelper.setClientId(createClientResponseBody.getClientId());
+                        preferencesHelper.saveMobile(mobileNo);
                         Client client = new Client();
                         client.setClientId(createClientResponseBody.getClientId());
                         client.setName(name);
@@ -74,7 +76,6 @@ public class CreateClientPresenter implements CreateClientContract.CreateClientP
                         createUserResponseBody = response.getCreateUserResponseBody();
                         mCreateClientView.showCreateUserResult(createUserResponseBody);
                     }
-
                     @Override
                     public void onError(String message) {
                         mCreateClientView.showToast(Constants.ERROR_OCCURRED);

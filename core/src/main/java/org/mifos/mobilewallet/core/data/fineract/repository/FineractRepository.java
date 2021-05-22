@@ -30,6 +30,7 @@ import org.mifos.mobilewallet.core.domain.model.CurrencyConversionRequestBody;
 import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.core.domain.model.DepositRequestBody;
 import org.mifos.mobilewallet.core.domain.model.DepositResponseBody;
+import org.mifos.mobilewallet.core.domain.model.LoginRequestBody;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.Statement;
@@ -253,7 +254,8 @@ public class FineractRepository {
     //self user apis
 
     public Observable<UserEntity> loginSelf(String username, String password) {
-        return selfApiManager.getAuthenticationApi().authenticate(username, password);
+        LoginRequestBody loginRequestBody = new LoginRequestBody(username, password);
+        return selfApiManager.getAuthenticationApi().authenticate(loginRequestBody);
     }
 
     public Observable<Client> getSelfClientDetails(long clientId) {

@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
@@ -30,9 +31,10 @@ public class LoginCompleteActivity extends BaseActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginCompleteActivity.this, PassCodeActivity.class);
+                Intent intent = new Intent(LoginCompleteActivity.this, MerchantLocationActivity.class);
                 intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
                 startActivity(intent);
+                finish();
             }
         });
     }

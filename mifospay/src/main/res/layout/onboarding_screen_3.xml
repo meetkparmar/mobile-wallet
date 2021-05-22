@@ -80,7 +80,7 @@
         android:layout_marginEnd="@dimen/value_50dp"
         android:layout_marginRight="@dimen/value_50dp"
         android:gravity="end"
-        android:text="Banking, Payments and Overseas Money Transfer, No Minimum Balance or Transaction Requirements. No Hidden Fees."
+        android:text="@string/truly_free_sub_text"
         app:layout_constraintBottom_toTopOf="@id/round_bottom"
         app:layout_constraintEnd_toEndOf="parent" />
 

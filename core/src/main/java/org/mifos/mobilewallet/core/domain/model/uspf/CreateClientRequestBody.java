@@ -17,10 +17,10 @@ public class CreateClientRequestBody {
     private int savingsProductId;
     private int legalFormId;
     private int officeId = 1;
-    private List<String> address = new ArrayList<>();
+    private List<ClientAddress> address = new ArrayList<>();
     private List<String> familyMembers = new ArrayList<>();
 
-    public CreateClientRequestBody(String firstname, String lastname, String mobileNo, String dateOfBirth, String submittedOnDate, String activationDate, String dateFormat, String locale, Boolean active, int savingsProductId, int legalFormId, int officeId, List<String> address, List<String> familyMembers) {
+    public CreateClientRequestBody(String firstname, String lastname, String mobileNo, String dateOfBirth, String submittedOnDate, String activationDate, String dateFormat, String locale, Boolean active, int savingsProductId, int legalFormId, int officeId, List<ClientAddress> address, List<String> familyMembers) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.mobileNo = mobileNo;

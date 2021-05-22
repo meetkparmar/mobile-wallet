@@ -62,6 +62,9 @@ public class StatementFragment extends BaseFragment implements StatementContract
     @BindView(R.id.pb_statement)
     ProgressBar pbStatement;
 
+    @BindView(R.id.tv_empty_list)
+    TextView tvEmptyList;
+
     @Override
     public void setPresenter(StatementContract.StatementPresenter presenter) {
         mStatementPresenter = presenter;
@@ -132,6 +135,7 @@ public class StatementFragment extends BaseFragment implements StatementContract
     public void showStatements(List<Statement> statements) {
         setSwipeEnabled(false);
         hideSwipeProgress();
+        pbStatement.setVisibility(View.GONE);
 
         if (statements == null) {
             Toaster.showToast(getContext(), Constants.ERROR_FETCHING_TRANSACTION_DETAILS);
@@ -141,7 +145,7 @@ public class StatementFragment extends BaseFragment implements StatementContract
                 showRecyclerView();
                 mStatementAdapter.setData(statements);
             } else {
-                Toaster.showToast(getContext(), Constants.ERROR_FETCHING_TRANSACTION_DETAILS);
+                tvEmptyList.setVisibility(View.VISIBLE);
             }
         }
 

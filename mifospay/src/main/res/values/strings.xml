@@ -300,10 +300,15 @@
     <string name="click_here">Click Here</string>
     <string name="social_security_number">Social Security Number</string>
     <string name="dont_have_social_security_number">Dont have a Social Security Number?</string>
-    <string name="congratulation">Congratulation</string>
+    <string name="congratulation">Congratulations</string>
     <string name="lets_start">Lets start</string>
     <string name="card_info_title">What is Reloadable card?</string>
     <string name="card_info_sub_title1">Reloadable debit cards allow you to add money to them as needed. A reloadable card works like a debit card, except that you preload funds onto the card with cash rather than use the card to access money held in a checking account.</string>
     <string name="card_info_sub_title2">A reloadable debit card, on the other hand, is not linked to a bank account. So, unlike a bank debit card, which normally allows you to spend as much money as you have in the account, a reloadable card limits you to the money you have loaded onto it..</string>
-
+    <string name="global_sub_text">I Bank is a global finance network that combines the convenience of a prepaid debit card with the robust features and benefits of  an online Bank.</string>
+    <string name="bank_anywhere_sub_text">True convenience: Banking at your favorite store. And shopping at millions of stores that accept visa card.</string>
+    <string name="truly_free_sub_text">Banking, Payments and Overseas Money Transfer, No Minimum Balance or Transaction Requirements. No Hidden Fees.</string>
+    <string name="open_location_settings">Open location settings</string>
+    <string name="gps_network_not_enabled">GPS network not enabled</string>
+    <string name="location_not_found">Location not found</string>
 </resources>

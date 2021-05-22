@@ -368,6 +368,7 @@ public class KycActivity extends BaseActivity implements KycContract.KycView {
         } else {
             Intent intent = new Intent(this, LoginCompleteActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 

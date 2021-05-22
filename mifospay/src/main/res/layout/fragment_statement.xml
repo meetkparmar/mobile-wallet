@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cc_statement_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/pb_statement"
         style="@style/Widget.AppCompat.ProgressBar"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_statement"
@@ -25,5 +24,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/marginItemsInSectionLarge" />
+
+    <TextView
+        android:id="@+id/tv_empty_list"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Empty Statements"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>
