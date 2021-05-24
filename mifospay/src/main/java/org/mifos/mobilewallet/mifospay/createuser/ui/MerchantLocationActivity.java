@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.createuser.adapter.MerchantAdapter;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
@@ -98,7 +99,7 @@ public class MerchantLocationActivity extends BaseActivity {
                     buttonState = 2;
                     btnLocate.setText(R.string.confirm);
                 } else {
-                    Intent intent = new Intent(MerchantLocationActivity.this, PassCodeActivity.class);
+                    Intent intent = new Intent(MerchantLocationActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
                 }

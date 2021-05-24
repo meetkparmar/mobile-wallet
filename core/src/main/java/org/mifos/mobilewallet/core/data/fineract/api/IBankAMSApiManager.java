@@ -26,7 +26,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UsPfFinancialApiManager {
+public class IBankAMSApiManager {
 
     public static final String TENANT_ID = "ibank-usa";
     public static final String CONTENT_TYPE_ID = "application/json";
@@ -36,7 +36,7 @@ public class UsPfFinancialApiManager {
     private static Retrofit retrofit;
     private static UsPfFinancialService usPfFinancialService;
 
-    public UsPfFinancialApiManager() {
+    public IBankAMSApiManager() {
         createService();
     }
 

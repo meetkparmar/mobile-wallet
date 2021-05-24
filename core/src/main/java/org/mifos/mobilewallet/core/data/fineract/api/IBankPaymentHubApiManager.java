@@ -10,7 +10,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FinancialApiManager {
+public class IBankPaymentHubApiManager {
 
     public static final String TENANT_ID = "ibank-usa";
     private static BaseURL baseUrl = new BaseURL();
@@ -19,7 +19,7 @@ public class FinancialApiManager {
     private static Retrofit retrofit;
     private static FinancialService financialServiceApi;
 
-    public FinancialApiManager() {
+    public IBankPaymentHubApiManager() {
         createService();
     }
 

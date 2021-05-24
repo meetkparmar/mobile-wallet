@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
-import org.mifos.mobilewallet.core.data.fineract.api.FinancialApiManager;
+import org.mifos.mobilewallet.core.data.fineract.api.IBankPaymentHubApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
-import org.mifos.mobilewallet.core.data.fineract.api.UsPfFinancialApiManager;
+import org.mifos.mobilewallet.core.data.fineract.api.IBankAMSApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
@@ -54,7 +54,6 @@ import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +64,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import okio.BufferedSink;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -78,15 +76,15 @@ public class FineractRepository {
 
     private final FineractApiManager fineractApiManager;
     private final SelfServiceApiManager selfApiManager;
-    private final FinancialApiManager financialApiManager;
-    private final UsPfFinancialApiManager usPfFinancialApiManager;
+    private final IBankPaymentHubApiManager IBankPaymentHubApiManager;
+    private final IBankAMSApiManager IBankAMSApiManager;
 
     @Inject
     public FineractRepository(FineractApiManager fineractApiManager) {
         this.fineractApiManager = fineractApiManager;
         this.selfApiManager = FineractApiManager.getSelfApiManager();
-        this.financialApiManager = FineractApiManager.getsFinanceInstance();
-        this.usPfFinancialApiManager = FineractApiManager.getUsPfFinanceInstance();
+        this.IBankPaymentHubApiManager = FineractApiManager.getsFinanceInstance();
+        this.IBankAMSApiManager = FineractApiManager.getUsPfFinanceInstance();
     }
 
     public Observable<CreateClient.ResponseValue> createClient(NewClient newClient) {
@@ -297,51 +295,51 @@ public class FineractRepository {
     }
 
     public Observable<AccountNameDetails> getAccountName(String identifierType, String identifier) {
-        return financialApiManager.getFinancialServiceApi().getAccountName(identifierType, identifier);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().getAccountName(identifierType, identifier);
     }
 
     public Observable<CurrencyConversionResponseBody> currencyConvert(CurrencyConversionRequestBody currencyConversionRequestBody) {
-        return financialApiManager.getFinancialServiceApi().currencyConvert(currencyConversionRequestBody);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().currencyConvert(currencyConversionRequestBody);
     }
 
     public Observable<IntTransferResponseBody> gsmaTransfer(IntTransferRequestBody intTransferRequestBody) {
-        return financialApiManager.getFinancialServiceApi().gsmaTransfer(intTransferRequestBody);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().gsmaTransfer(intTransferRequestBody);
     }
 
     public Observable<GsmaRequestStateResponseBody> gsmaRequestState(String key) {
-        return financialApiManager.getFinancialServiceApi().gsmaRequestState(key);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().gsmaRequestState(key);
     }
 
     public Observable<AccountBalance> getAccountBalance(String mobileNo) {
-        return financialApiManager.getFinancialServiceApi().getAccountBalance(mobileNo);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().getAccountBalance(mobileNo);
     }
 
     public Observable<List<Statement>> getStatement(String mobileNo) {
-        return financialApiManager.getFinancialServiceApi().getStatements(mobileNo);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().getStatements(mobileNo);
     }
 
     public Observable<DepositResponseBody> depositMoney(DepositRequestBody depositRequestBody) {
-        return financialApiManager.getFinancialServiceApi().depositMoney(depositRequestBody);
+        return IBankPaymentHubApiManager.getFinancialServiceApi().depositMoney(depositRequestBody);
     }
 
     public Observable<CreateClientResponseBody> createClient(CreateClientRequestBody createClientRequestBody) {
-        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createClient(createClientRequestBody);
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().createClient(createClientRequestBody);
     }
 
     public Observable<CreateUserResponseBody> createUserForUsPf(CreateUserRequestBody createUserRequestBody) {
-        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createUser(createUserRequestBody);
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().createUser(createUserRequestBody);
     }
 
     public Observable<IdentifierTemplateResponseBody> fetchIdentifierTemplate(int clientId) {
-        return usPfFinancialApiManager.getUsPfFinancialServiceApi().fetchIdentifierTemplate(clientId);
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().fetchIdentifierTemplate(clientId);
     }
 
     public Observable<CreateIdentifierResponseBody> createIdentifier(CreateIdentifierRequestBody createIdentifierRequestBody, int clientId) {
-        return usPfFinancialApiManager.getUsPfFinancialServiceApi().createIdentifier(createIdentifierRequestBody, clientId);
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().createIdentifier(createIdentifierRequestBody, clientId);
     }
 
     public Observable<UploadDocumentResponseBody> uploadDocument(Map<String, String> partMap, File file, int clientId) {
-        return usPfFinancialApiManager.getUsPfFinancialServiceApi().uploadDocument("client_identifiers", clientId, partMap, getRequestFileBody(file));
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().uploadDocument("client_identifiers", clientId, partMap, getRequestFileBody(file));
     }
 
     private MultipartBody.Part getRequestFileBody(File file) {

@@ -205,7 +205,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         hideLoadingDialog();
         clientId = createClientResponseBody.getClientId();
         createUserRequestBody = new CreateUserRequestBody(
-                etEmail.getText().toString(),
+                etMobileNumber.getText().toString(),
                 etFirstName.getText().toString(),
                 etLastName.getText().toString(),
                 etEmail.getText().toString(),
@@ -213,7 +213,9 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
                 1,
                 Arrays.asList(1),
                 "password",
-                "password"
+                "password",
+                true,
+                Arrays.asList(createClientResponseBody.getClientId())
         );
 
         Client client = new Client();

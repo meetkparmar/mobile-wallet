@@ -24,7 +24,6 @@ public class BaseURL {
 
     public String getUrl() {
         return PROTOCOL_HTTPS + API_ENDPOINT_US_PF_FINANCIAL + API_PATH;
-
     }
 
     public String getSelfServiceUrl() {

@@ -7,7 +7,17 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationServic
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
 
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -22,6 +32,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SelfServiceApiManager {
 
     public static final String DEFAULT = "default";
+    public static final String TENANT_ID = "ibank-usa";
+    public static final String CONTENT_TYPE_ID = "application/json";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getSelfServiceUrl();
 
@@ -38,31 +50,8 @@ public class SelfServiceApiManager {
         createService(authToken);
     }
 
-    private static void init() {
-        authenticationApi = createApi(AuthenticationService.class);
-        clientsApi = createApi(ClientService.class);
-        savingAccountsListApi = createApi(SavingsAccountsService.class);
-        registrationAPi = createApi(RegistrationService.class);
-        beneficiaryApi = createApi(BeneficiaryService.class);
-        thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
-    }
-
-    private static <T> T createApi(Class<T> clazz) {
-        return retrofit.create(clazz);
-    }
-
     public static void createService(String authToken) {
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
-                .build();
+        OkHttpClient okHttpClient = getOkHttpClient(authToken);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -70,7 +59,69 @@ public class SelfServiceApiManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
+
         init();
+    }
+
+    private static OkHttpClient getOkHttpClient(String authToken) {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            return new OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .addInterceptor(new ApiInterceptor(authToken, TENANT_ID, CONTENT_TYPE_ID))
+                    .addInterceptor(interceptor)
+                    .sslSocketFactory(sslSocketFactory , (X509TrustManager)trustAllCerts[0])
+                    .hostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    })
+                    .build();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private static <T> T createApi(Class<T> clazz) {
+        return retrofit.create(clazz);
+    }
+
+    private static void init() {
+        authenticationApi = createApi(AuthenticationService.class);
+        clientsApi = createApi(ClientService.class);
+        savingAccountsListApi = createApi(SavingsAccountsService.class);
+        registrationAPi = createApi(RegistrationService.class);
+        beneficiaryApi = createApi(BeneficiaryService.class);
+        thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
     }
 
     public AuthenticationService getAuthenticationApi() {

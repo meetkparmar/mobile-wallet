@@ -19,10 +19,26 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthServi
 import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
 import org.mifos.mobilewallet.core.utils.Constants;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.concurrent.TimeUnit;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import okhttp3.Authenticator;
+import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -36,6 +52,8 @@ public class FineractApiManager {
 
     public static final String DEFAULT = "default";
     public static final String BASIC = "Basic ";
+    public static final String TENANT_ID = "ibank-usa";
+    public static final String CONTENT_TYPE_ID = "application/json";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
 
@@ -57,8 +75,8 @@ public class FineractApiManager {
     private static NotificationService notificationApi;
 
     private static SelfServiceApiManager sSelfInstance;
-    private static FinancialApiManager sFinanceInstance;
-    private static UsPfFinancialApiManager usPfFinancialApiManager;
+    private static IBankPaymentHubApiManager sFinanceInstance;
+    private static IBankAMSApiManager IBankAMSApiManager;
 
     public FineractApiManager() {
         String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD
@@ -70,11 +88,11 @@ public class FineractApiManager {
         }
 
         if (sFinanceInstance == null) {
-            sFinanceInstance = new FinancialApiManager();
+            sFinanceInstance = new IBankPaymentHubApiManager();
         }
 
-        if (usPfFinancialApiManager == null) {
-            usPfFinancialApiManager = new UsPfFinancialApiManager();
+        if (IBankAMSApiManager == null) {
+            IBankAMSApiManager = new IBankAMSApiManager();
         }
     }
 
@@ -101,17 +119,7 @@ public class FineractApiManager {
     }
 
     public static void createService(String authToken) {
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
-                .build();
+        OkHttpClient okHttpClient = getOkHttpClient();
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -123,6 +131,61 @@ public class FineractApiManager {
         init();
     }
 
+    private static OkHttpClient getOkHttpClient() {
+        try {
+            // Create a trust manager that does not validate certificate chains
+            final TrustManager[] trustAllCerts = new TrustManager[] {
+                    new X509TrustManager() {
+                        @Override
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        }
+
+                        @Override
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return new java.security.cert.X509Certificate[]{};
+                        }
+                    }
+            };
+
+            // Install the all-trusting trust manager
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+            final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+            return new OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .addInterceptor(new UsPfFinancialApiInterceptor(TENANT_ID, CONTENT_TYPE_ID))
+                    .authenticator(new Authenticator() {
+                        @Override
+                        public Request authenticate(Route route, Response response) throws IOException {
+                            String credential = Credentials.basic("mifos", "password");
+                            return response.request().newBuilder().header("Authorization", credential).build();
+                        }
+                    })
+                    .addInterceptor(interceptor)
+                    .sslSocketFactory(sslSocketFactory , (X509TrustManager)trustAllCerts[0])
+                    .hostnameVerifier(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String hostname, SSLSession session) {
+                            return true;
+                        }
+                    })
+                    .build();
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void createSelfService(String authToken) {
         SelfServiceApiManager.createService(authToken);
     }
@@ -131,12 +194,12 @@ public class FineractApiManager {
         return sSelfInstance;
     }
 
-    public static FinancialApiManager getsFinanceInstance() {
+    public static IBankPaymentHubApiManager getsFinanceInstance() {
         return sFinanceInstance;
     }
 
-    public static UsPfFinancialApiManager getUsPfFinanceInstance() {
-        return usPfFinancialApiManager;
+    public static IBankAMSApiManager getUsPfFinanceInstance() {
+        return IBankAMSApiManager;
     }
 
     public AuthenticationService getAuthenticationApi() {
