@@ -86,8 +86,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     @Override
     public void fetchAccountBalance() {
-//        String mobileNo = "+" + localRepository.getPreferencesHelper().getMobile();
-        String mobileNo = "+919900878571";
+        String mobileNo = localRepository.getPreferencesHelper().getMobile();
+//        String mobileNo = "+919900878571";
         mUsecaseHandler.execute(mFetchAccountBalanceUseCase,
                 new FetchAccountBalance.RequestValues(mobileNo),
                 new UseCase.UseCaseCallback<FetchAccountBalance.ResponseValue>() {

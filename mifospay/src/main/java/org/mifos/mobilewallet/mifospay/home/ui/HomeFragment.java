@@ -235,9 +235,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         String currencyCode = accountBalance.getCurrency();
         hideSwipeProgress();
         if (currencyCode.equals("USD")) {
-            balance = "$ " + mAccountBalance.getCurrentBalance();
+            balance = "$ " + String.format("%.2f", Float.parseFloat(mAccountBalance.getAvailableBalance()));
         } else {
-            balance = "₹ " + mAccountBalance.getCurrentBalance();
+            balance = "₹ " + String.format("%.2f", Float.parseFloat(mAccountBalance.getAvailableBalance()));
         }
         hideSwipeProgress();
         TransitionManager.beginDelayedTransition(homeScreenContainer);

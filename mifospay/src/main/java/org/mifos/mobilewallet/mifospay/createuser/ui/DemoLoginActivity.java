@@ -130,7 +130,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         createClientRequestBody = new CreateClientRequestBody(
                 etFirstName.getText().toString(),
                 etLastName.getText().toString(),
-                ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString(),
+                "+" + ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString(),
                 formattedDate,
                 currentDate(),
                 currentDate(),
@@ -144,7 +144,7 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
                 new ArrayList<String>()
         );
         showLoadingDialog("Loading...");
-        mCreateClientPresenter.createClient(createClientRequestBody, etFirstName.getText().toString(), ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString());
+        mCreateClientPresenter.createClient(createClientRequestBody, etFirstName.getText().toString(), "+" + ccpPhonecode.getFullNumber() + etMobileNumber.getText().toString());
     }
 
     private String currentDate() {
