@@ -312,4 +312,6 @@
     <string name="gps_network_not_enabled">GPS network not enabled</string>
     <string name="location_not_found">Location not found</string>
     <string name="usernameOrMobileOrEmail">Username/Email/Mobile number</string>
+    <string name="add_address">Add Address</string>
+    <string name="merchant_location">Merchant Location</string>
 </resources>

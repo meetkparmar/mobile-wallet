@@ -205,4 +205,5 @@ public class Constants {
     public static final String UPDATE_PASSCODE = "update passcode";
 
     public static final String ADDRESS = "address";
+    public static final String ADDRESS_ADDED_SUCCESSFULLY = "Address added successfully.";
 }

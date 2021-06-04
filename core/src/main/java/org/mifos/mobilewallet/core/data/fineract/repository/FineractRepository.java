@@ -41,6 +41,8 @@ import org.mifos.mobilewallet.core.domain.model.gsma.IntTransferResponseBody;
 import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
 import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
+import org.mifos.mobilewallet.core.domain.model.uspf.AddAddressResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.ClientAddress;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
@@ -345,5 +347,9 @@ public class FineractRepository {
     private MultipartBody.Part getRequestFileBody(File file) {
         RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+    }
+
+    public Observable<AddAddressResponseBody> addAddress(ClientAddress clientAddress, int clientId, int addressType) {
+        return IBankAMSApiManager.getUsPfFinancialServiceApi().addAddress(clientAddress, clientId, addressType);
     }
 }

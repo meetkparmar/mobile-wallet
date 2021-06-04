@@ -155,7 +155,7 @@
             android:name=".createuser.ui.DemoLoginActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".createuser.ui.LocationActivity"
+            android:name=".location.ui.LocationActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".createuser.ui.OnBoardingActivity"
@@ -167,7 +167,7 @@
             android:name=".createuser.ui.LoginCompleteActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".createuser.ui.MerchantLocationActivity"
+            android:name=".location.ui.MerchantLocationActivity"
             android:theme="@style/AppTheme" />
     </application>
 

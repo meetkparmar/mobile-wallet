@@ -44,6 +44,21 @@
         android:layout_marginTop="@dimen/marginItemsInSectionMedium" />
 
     <Button
+        android:id="@+id/btn_add_address"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/marginBetweenSections"
+        android:text="@string/add_address" />
+
+    <Button
+        android:id="@+id/btn_merchant_location"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/merchant_location" />
+
+    <Button
         android:id="@+id/btn_profile_bottom_sheet_action"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"

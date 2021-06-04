@@ -1,7 +1,7 @@
-package org.mifos.mobilewallet.mifospay.createuser.ui;
+package org.mifos.mobilewallet.mifospay.location.ui;
 
 import android.Manifest;
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -32,19 +32,30 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
+import org.mifos.mobilewallet.core.domain.model.uspf.AddAddressResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.ClientAddress;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.location.contract.LocationContract;
+import org.mifos.mobilewallet.mifospay.location.presenter.LocationPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class LocationActivity extends BaseActivity {
+public class LocationActivity extends BaseActivity implements LocationContract.LocationView{
+
+    @Inject
+    LocationPresenter mPresenter;
+
+    LocationContract.locationPresenter mLocationPresenter;
 
     @BindView(R.id.cv_address)
     CardView cvAddress;
@@ -62,6 +73,7 @@ public class LocationActivity extends BaseActivity {
     Button btnLocate;
 
     private int buttonState = 1;
+    private ProgressDialog progressDialog;
     private GoogleMap mMap;
     private LatLng latLng;
     private Marker marker;
@@ -78,6 +90,8 @@ public class LocationActivity extends BaseActivity {
         getActivityComponent().inject(this);
         setContentView(R.layout.activity_location);
         ButterKnife.bind(this);
+        mPresenter.attachView(this);
+        progressDialog = new ProgressDialog(this);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         client = LocationServices.getFusedLocationProviderClient(this);
@@ -99,17 +113,16 @@ public class LocationActivity extends BaseActivity {
                     buttonState = 2;
                     btnLocate.setText(R.string.confirm);
                 } else {
+                    // addressTypeId is hardcode
                     ClientAddress address = new ClientAddress(
-                            "15",
+                            "17",
                             addresses.get(0).getAddressLine(0).split(",")[0],
                             addresses.get(0).getAddressLine(0).split(",")[1],
                             addresses.get(0).getAddressLine(0).split(",")[2],
                             addresses.get(0).getLocality(),
                             addresses.get(0).getPostalCode());
-                    Intent intent = new Intent(LocationActivity.this, DemoLoginActivity.class);
-                    intent.putExtra(Constants.ADDRESS, address);
-                    startActivity(intent);
-                    finish();
+                    showLoadingDialog("Loading...");
+                    mLocationPresenter.addAddress(address, 0, 17);
                 }
             }
         });
@@ -241,4 +254,33 @@ public class LocationActivity extends BaseActivity {
         }
     };
 
+    @Override
+    public void showToast(String message) {
+        hideLoadingDialog();
+        Toaster.showToast(this, message);
+    }
+
+    @Override
+    public void showAddAddressResult(AddAddressResponseBody addAddressResponseBody) {
+        showToast(Constants.ADDRESS_ADDED_SUCCESSFULLY);
+        finish();
+    }
+
+    @Override
+    public void setPresenter(LocationContract.locationPresenter presenter) {
+        mLocationPresenter = presenter;
+    }
+
+    private void showLoadingDialog(String message) {
+        if (!progressDialog.isShowing()) {
+            progressDialog.setMessage(message);
+            progressDialog.show();
+        }
+    }
+
+    private void hideLoadingDialog() {
+        if (progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
 }

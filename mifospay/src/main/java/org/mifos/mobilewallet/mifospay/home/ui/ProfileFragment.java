@@ -18,6 +18,8 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
+import org.mifos.mobilewallet.mifospay.location.ui.MerchantLocationActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -135,6 +137,20 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     public void onEditProfileClicked() {
         if (getActivity() != null) {
             getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
+        }
+    }
+
+    @OnClick(R.id.btn_add_address)
+    public void onAddAddressClicked() {
+        if (getActivity() != null) {
+            getActivity().startActivity(new Intent(getActivity(), LocationActivity.class));
+        }
+    }
+
+    @OnClick(R.id.btn_merchant_location)
+    public void onMerchantLocationClicked() {
+        if (getActivity() != null) {
+            getActivity().startActivity(new Intent(getActivity(), MerchantLocationActivity.class));
         }
     }
 

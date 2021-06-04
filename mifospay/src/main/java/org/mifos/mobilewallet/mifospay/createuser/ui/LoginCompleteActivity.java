@@ -31,8 +31,8 @@ public class LoginCompleteActivity extends BaseActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginCompleteActivity.this, MerchantLocationActivity.class);
-                intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
+                Intent intent = new Intent(LoginCompleteActivity.this, LoginActivity.class);
+//                intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
                 startActivity(intent);
                 finish();
             }

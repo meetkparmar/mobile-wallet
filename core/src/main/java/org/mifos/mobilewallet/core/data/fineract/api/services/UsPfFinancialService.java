@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
+import org.mifos.mobilewallet.core.domain.model.uspf.AddAddressResponseBody;
+import org.mifos.mobilewallet.core.domain.model.uspf.ClientAddress;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientRequestBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateClientResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.CreateIdentifierRequestBody;
@@ -19,6 +21,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 import rx.Observable;
 
 public interface UsPfFinancialService {
@@ -51,5 +54,12 @@ public interface UsPfFinancialService {
             @Path("entityId") int clientId,
             @PartMap Map<String, String> map,
             @Part MultipartBody.Part file
+            );
+
+    @POST("client/{clientId}/addresses")
+    Observable<AddAddressResponseBody> addAddress(
+            @Body ClientAddress clientAddress,
+            @Path("clientId") int clientId,
+            @Query("type") int addressType
             );
 }

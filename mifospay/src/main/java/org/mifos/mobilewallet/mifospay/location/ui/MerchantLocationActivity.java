@@ -1,7 +1,6 @@
-package org.mifos.mobilewallet.mifospay.createuser.ui;
+package org.mifos.mobilewallet.mifospay.location.ui;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -34,10 +33,8 @@ import com.google.android.gms.tasks.Task;
 
 import org.jetbrains.annotations.NotNull;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.createuser.adapter.MerchantAdapter;
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -99,8 +96,6 @@ public class MerchantLocationActivity extends BaseActivity {
                     buttonState = 2;
                     btnLocate.setText(R.string.confirm);
                 } else {
-                    Intent intent = new Intent(MerchantLocationActivity.this, LoginActivity.class);
-                    startActivity(intent);
                     finish();
                 }
             }

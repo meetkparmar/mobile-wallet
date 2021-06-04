@@ -80,7 +80,6 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
     private Boolean active = true;
     private String formattedDate = "";
     private int clientId = -1;
-    private ClientAddress clientAddress;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,8 +89,6 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
         ButterKnife.bind(this);
         mPresenter.attachView(this);
         progressDialog = new ProgressDialog(this);
-
-        clientAddress = (ClientAddress) getIntent().getSerializableExtra(Constants.ADDRESS);
 
         etFirstName.addTextChangedListener(textWatcher);
         etLastName.addTextChangedListener(textWatcher);
@@ -126,7 +123,6 @@ public class DemoLoginActivity extends BaseActivity implements CreateClientContr
 
     private void submitDetails() {
         List<ClientAddress> addresses = new ArrayList<>();
-        addresses.add(clientAddress);
         createClientRequestBody = new CreateClientRequestBody(
                 etFirstName.getText().toString(),
                 etLastName.getText().toString(),

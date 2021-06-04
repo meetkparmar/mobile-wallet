@@ -75,7 +75,7 @@ public class OnBoardingActivity extends BaseActivity implements ViewPager.OnPage
     }
 
     private void openActivity() {
-        Intent intent = new Intent(this, LocationActivity.class);
+        Intent intent = new Intent(this, DemoLoginActivity.class);
         startActivity(intent);
         finish();
     }
