@@ -206,4 +206,5 @@ public class Constants {
 
     public static final String ADDRESS = "address";
     public static final String ADDRESS_ADDED_SUCCESSFULLY = "Address added successfully.";
+    public static final String LOCATION = "location";
 }

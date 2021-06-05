@@ -28,6 +28,7 @@ public class PreferencesHelper {
     private static final String MOBILE_NO = "preferences_mobile_no";
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
     private static final String ACCOUNT_ID = "preferences_account_id";
+    private static final String LOCATION = "preferences_location";
 
     private SharedPreferences sharedPreferences;
 
@@ -63,6 +64,14 @@ public class PreferencesHelper {
 
     public void putString(String preferenceKey, String preferenceValue) {
         sharedPreferences.edit().putString(preferenceKey, preferenceValue).apply();
+    }
+
+    public boolean getBoolean(String preferenceKey, boolean preferenceDefaultValue) {
+        return sharedPreferences.getBoolean(preferenceKey, preferenceDefaultValue);
+    }
+
+    public void putBoolean(String preferenceKey, boolean preferenceValue) {
+        sharedPreferences.edit().putBoolean(preferenceKey, preferenceValue).apply();
     }
 
     public void saveToken(String token) {
@@ -147,6 +156,14 @@ public class PreferencesHelper {
 
     public void setFirebaseRegId(String firebaseRegId) {
         putString(FIREBASE_REG_ID, firebaseRegId);
+    }
+
+    public void setLocation(boolean isLocationAdded) {
+        putBoolean(LOCATION, isLocationAdded);
+    }
+
+    public boolean getLocation() {
+        return getBoolean(LOCATION, false);
     }
 
 }

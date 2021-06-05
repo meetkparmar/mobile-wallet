@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -215,7 +217,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     @Override
-    public void setAccountBalance(Account account) {
+    public void setAccountBalance(Account account, boolean isLocationAdded) {
         this.account = account;
 
         String currencyCode = account.getCurrency().getCode();
@@ -226,6 +228,19 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         TransitionManager.beginDelayedTransition(homeScreenContainer);
         mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
         tvHideBalance.setVisibility(View.INVISIBLE);
+
+        if (!isLocationAdded) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle(R.string.address_title);
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     @Override

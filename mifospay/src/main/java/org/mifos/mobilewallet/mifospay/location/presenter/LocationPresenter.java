@@ -39,6 +39,7 @@ public class LocationPresenter implements LocationContract.locationPresenter {
                 new UseCase.UseCaseCallback<AddAddress.ResponseValue>() {
                     @Override
                     public void onSuccess(AddAddress.ResponseValue response) {
+                        preferencesHelper.setLocation(true);
                         addAddressResponseBody = response.getAddAddressResponseBody();
                         locationView.showAddAddressResult(addAddressResponseBody);
                     }

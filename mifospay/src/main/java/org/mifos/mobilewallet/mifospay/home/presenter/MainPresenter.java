@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 
 import javax.inject.Inject;
@@ -17,14 +18,16 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
+    private final PreferencesHelper preferencesHelper;
     @Inject
     FetchClientData fetchClientData;
     private BaseHomeContract.BaseHomeView mHomeView;
 
     @Inject
-    public MainPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
+    public MainPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository, PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
                     public void onSuccess(FetchClientData.ResponseValue response) {
                         localRepository.saveClientData(response.getUserDetails());
                         if (!response.getUserDetails().getName().equals("")) {
-                            mHomeView.showClientDetails(response.getUserDetails());
+                            mHomeView.showClientDetails(response.getUserDetails(), preferencesHelper.getLocation());
                         }
                     }
 

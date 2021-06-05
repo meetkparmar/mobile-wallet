@@ -41,6 +41,8 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
 
     BaseHomeContract.BaseHomePresenter mHomePresenter;
 
+    private boolean isLocationAdded = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,11 +92,13 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
     }
 
     @Override
-    public void showClientDetails(Client client) {
+    public void showClientDetails(Client client, boolean isLocationAdded) {
+        this.isLocationAdded = isLocationAdded;
 //        tvUserName.setText(client.getName());
 //        TextDrawable drawable = TextDrawable.builder()
 //                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
 //        ivUserImage.setImageDrawable(drawable);
+
     }
 
     @Override
@@ -120,12 +124,12 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     break;
 
                 case R.id.action_payments:
-                    replaceFragment(PaymentsFragment.newInstance(), false,
+                    replaceFragment(PaymentsFragment.newInstance(isLocationAdded), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 
                 case R.id.action_finance:
-                    replaceFragment(FinanceFragment.newInstance(), false,
+                    replaceFragment(FinanceFragment.newInstance(isLocationAdded), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 
