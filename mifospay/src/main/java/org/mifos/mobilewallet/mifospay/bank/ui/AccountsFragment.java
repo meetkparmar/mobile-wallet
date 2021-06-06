@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +23,8 @@ import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
@@ -37,6 +41,9 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
     public static final int BANK_ACCOUNT_DETAILS_REQUEST_CODE = 3;
+
+    @Inject
+    LocalRepository localRepository;
 
     @BindView(R.id.inc_state_view)
     View vStateView;
@@ -64,6 +71,12 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +91,21 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
         setupRecycletView();
         setUpSwipeRefresh();
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         showSwipeProgress();
         mBankAccountsPresenter.fetchLinkedBankAccounts();
         return rootView;

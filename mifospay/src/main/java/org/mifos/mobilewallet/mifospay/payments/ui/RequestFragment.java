@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.AccountNameDetails;
@@ -14,7 +16,9 @@ import org.mifos.mobilewallet.core.domain.model.CurrencyConversionResponseBody;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -34,6 +38,9 @@ import io.michaelrocks.libphonenumber.android.Phonenumber;
 public class RequestFragment extends BaseFragment implements BaseHomeContract.TransferView {
 
     @Inject
+    LocalRepository localRepository;
+
+    @Inject
     TransferPresenter mPresenter;
 
     BaseHomeContract.TransferPresenter mTransferPresenter;
@@ -46,6 +53,12 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
 
     @BindView(R.id.btn_show_qr)
     TextView btnShowQr;
+
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
 
     private String vpa;
 
@@ -62,6 +75,21 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
         View root = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mPresenter.fetchVpa();
         mPresenter.fetchMobile();
         return root;

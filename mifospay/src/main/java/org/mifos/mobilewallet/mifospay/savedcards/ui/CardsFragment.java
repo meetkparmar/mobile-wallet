@@ -1,8 +1,10 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.chip.Chip;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
@@ -21,6 +24,8 @@ import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -41,6 +46,9 @@ import butterknife.OnClick;
  * @since 21/May/2018
  */
 public class CardsFragment extends BaseFragment implements CardsContract.CardsView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     CardsPresenter mPresenter;
@@ -71,6 +79,12 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @BindView(R.id.btn_add_card)
     Chip addCard;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     View rootView;
 
     public static CardsFragment newInstance() {
@@ -94,6 +108,21 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         setUpSwipeRefresh();
         setupCardsRecyclerView();
         showSwipeProgress();

@@ -68,7 +68,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         preferencesHelper.setAccountId(response.getAccount().getId());
-                        mHomeView.setAccountBalance(response.getAccount(), preferencesHelper.getLocation());
+                        mHomeView.setAccountBalance(response.getAccount());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
                         mHomeView.hideSwipeProgress();
                     }

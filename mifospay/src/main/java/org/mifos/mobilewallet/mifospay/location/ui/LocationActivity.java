@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.location.ui;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -36,6 +37,7 @@ import org.mifos.mobilewallet.core.domain.model.uspf.AddAddressResponseBody;
 import org.mifos.mobilewallet.core.domain.model.uspf.ClientAddress;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.location.contract.LocationContract;
 import org.mifos.mobilewallet.mifospay.location.presenter.LocationPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -263,6 +265,8 @@ public class LocationActivity extends BaseActivity implements LocationContract.L
     @Override
     public void showAddAddressResult(AddAddressResponseBody addAddressResponseBody) {
         showToast(Constants.ADDRESS_ADDED_SUCCESSFULLY);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
         finish();
     }
 

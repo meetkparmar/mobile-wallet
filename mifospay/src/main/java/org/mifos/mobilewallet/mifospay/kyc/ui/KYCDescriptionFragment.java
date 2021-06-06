@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,11 @@ import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCDescriptionPresenter;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -34,6 +37,9 @@ import butterknife.OnClick;
 
 public class KYCDescriptionFragment extends
         BaseFragment implements KYCContract.KYCDescriptionView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     KYCDescriptionPresenter mPresenter;
@@ -76,6 +82,12 @@ public class KYCDescriptionFragment extends
     @BindView(R.id.tickimg3)
     ImageView tickImg3;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     public static KYCDescriptionFragment newInstance() {
 
         Bundle args = new Bundle();
@@ -104,6 +116,21 @@ public class KYCDescriptionFragment extends
         View rootView = inflater.inflate(R.layout.fragment_kyc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         btnLvl1.setEnabled(false);
         btnLvl2.setEnabled(false);
         btnLvl3.setEnabled(false);

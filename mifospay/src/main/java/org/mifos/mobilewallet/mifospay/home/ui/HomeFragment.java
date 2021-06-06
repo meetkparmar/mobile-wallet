@@ -1,10 +1,12 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -25,8 +27,10 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -44,6 +48,9 @@ import static org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBal
  */
 
 public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter mPresenter;
@@ -88,6 +95,12 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @BindView(R.id.pb_loading_history)
     ProgressBar progressBar;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     private Account account;
 
     private AccountBalance mAccountBalance;
@@ -121,6 +134,20 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         setToolbarTitle(Constants.HOME);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         setUpSwipeRefresh();
         setupUi();
@@ -217,7 +244,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     @Override
-    public void setAccountBalance(Account account, boolean isLocationAdded) {
+    public void setAccountBalance(Account account) {
         this.account = account;
 
         String currencyCode = account.getCurrency().getCode();
@@ -228,19 +255,6 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         TransitionManager.beginDelayedTransition(homeScreenContainer);
         mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
         tvHideBalance.setVisibility(View.INVISIBLE);
-
-        if (!isLocationAdded) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.address_title);
-            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            AlertDialog dialog = builder.create();
-            dialog.show();
-        }
     }
 
     @Override

@@ -92,8 +92,7 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
     }
 
     @Override
-    public void showClientDetails(Client client, boolean isLocationAdded) {
-        this.isLocationAdded = isLocationAdded;
+    public void showClientDetails(Client client) {
 //        tvUserName.setText(client.getName());
 //        TextDrawable drawable = TextDrawable.builder()
 //                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
@@ -124,12 +123,12 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     break;
 
                 case R.id.action_payments:
-                    replaceFragment(PaymentsFragment.newInstance(isLocationAdded), false,
+                    replaceFragment(PaymentsFragment.newInstance(), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 
                 case R.id.action_finance:
-                    replaceFragment(FinanceFragment.newInstance(isLocationAdded), false,
+                    replaceFragment(FinanceFragment.newInstance(), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 

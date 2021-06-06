@@ -1,9 +1,11 @@
 package org.mifos.mobilewallet.mifospay.statement.ui;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +22,8 @@ import org.mifos.mobilewallet.core.domain.model.Statement;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.statement.StatementContract;
 import org.mifos.mobilewallet.mifospay.statement.presenter.StatementPresenter;
 import org.mifos.mobilewallet.mifospay.statement.ui.adapter.StatementAdapter;
@@ -33,6 +38,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class StatementFragment extends BaseFragment implements StatementContract.StatementView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     StatementAdapter mStatementAdapter;
@@ -65,6 +73,12 @@ public class StatementFragment extends BaseFragment implements StatementContract
     @BindView(R.id.tv_empty_list)
     TextView tvEmptyList;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     @Override
     public void setPresenter(StatementContract.StatementPresenter presenter) {
         mStatementPresenter = presenter;
@@ -83,6 +97,20 @@ public class StatementFragment extends BaseFragment implements StatementContract
         View root = inflater.inflate(R.layout.fragment_statement, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         setupSwipeRefreshLayout();
         setupRecyclerView();

@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Savings
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
@@ -35,6 +39,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MerchantsFragment extends BaseFragment implements MerchantsContract.MerchantsView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     MerchantsPresenter mPresenter;
@@ -61,6 +68,13 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @BindView(R.id.pb_merchants)
     ProgressBar mMerchantProgressBar;
+
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     private List<SavingsWithAssociations> merchantsList;
 
     @Override
@@ -75,6 +89,21 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         View rootView = inflater.inflate(R.layout.fragment_merchants, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
+
         mMerchantsPresenter.fetchMerchants();
         setupUi();
         return rootView;

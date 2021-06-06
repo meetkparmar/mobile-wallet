@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.chip.Chip;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.TransitionManager;
@@ -48,7 +49,9 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -75,6 +78,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     private static final int PICK_CONTACT = 1;
     private static final int REQUEST_READ_CONTACTS = 2;
 
+    @Inject
+    LocalRepository localRepository;
     @Inject
     TransferPresenter mPresenter;
     BaseHomeContract.TransferPresenter mTransferPresenter;
@@ -116,6 +121,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextView mEtAmountFrom;
     @BindView(R.id.et_amount_to)
     TextView mEtAmountTo;
+    @BindView(R.id.btn_convert_currency)
+    Button btnConvertCurrency;
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
 
     private String vpa;
     private ProgressDialog progressDialog;
@@ -148,6 +159,24 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mPresenter.attachView(this);
         mBtnMobile.setSelected(true);
         progressDialog = new ProgressDialog(getContext());
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            btnConvertCurrency.setEnabled(false);
+            btnTransfer.setEnabled(false);
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            btnConvertCurrency.setEnabled(true);
+            btnTransfer.setEnabled(true);
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mAmountFromCurrencyCode.setText(countryFrom);
         mAmountToCurrencyCode.setText(countryTo);

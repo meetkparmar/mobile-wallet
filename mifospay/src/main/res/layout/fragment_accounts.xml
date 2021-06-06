@@ -1,8 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/value_16dp"
+        android:background="@color/colorBanner"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="@string/address_title"/>
+
+        <Button
+            android:id="@+id/btn_address_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_banner"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/update"/>
+
+    </android.support.constraint.ConstraintLayout>
 
     <include
         android:id="@+id/inc_state_view"
@@ -11,7 +40,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/marginItemsInSectionLarge"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -22,16 +55,19 @@
         android:layout_marginTop="@dimen/marginBetweenSections"
         android:layout_marginStart="@dimen/paddingLayout"
         android:textColor="@color/colorTextPrimary"
-        android:layout_marginLeft="@dimen/paddingLayout" />
+        android:layout_marginLeft="@dimen/paddingLayout"
+        app:layout_constraintTop_toBottomOf="@id/banner"
+        app:layout_constraintStart_toStartOf="parent"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_accounts"
-        android:layout_below="@id/linked_bank_account_text"
-        android:layout_marginTop="@dimen/marginBetweenSections"
+        android:layout_marginTop="@dimen/value_16dp"
         android:layout_marginBottom="@dimen/value_70dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/linked_bank_account_text"/>
 
     <android.support.design.chip.Chip
         android:id="@+id/addaccountbutton"
@@ -44,7 +80,9 @@
         android:text="@string/add_account"
         app:chipIcon="@drawable/ic_add"
         app:chipIconTint="@color/colorPrimary"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

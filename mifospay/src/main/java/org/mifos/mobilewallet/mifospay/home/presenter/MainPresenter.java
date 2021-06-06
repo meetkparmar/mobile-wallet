@@ -18,16 +18,15 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
-    private final PreferencesHelper preferencesHelper;
+
     @Inject
     FetchClientData fetchClientData;
     private BaseHomeContract.BaseHomeView mHomeView;
 
     @Inject
-    public MainPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository, PreferencesHelper preferencesHelper) {
+    public MainPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
-        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -45,7 +44,7 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
                     public void onSuccess(FetchClientData.ResponseValue response) {
                         localRepository.saveClientData(response.getUserDetails());
                         if (!response.getUserDetails().getName().equals("")) {
-                            mHomeView.showClientDetails(response.getUserDetails(), preferencesHelper.getLocation());
+                            mHomeView.showClientDetails(response.getUserDetails());
                         }
                     }
 

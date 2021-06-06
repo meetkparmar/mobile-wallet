@@ -13,6 +13,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/value_16dp"
+            android:background="@color/colorBanner"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_banner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/TextAppearance.MaterialComponents.Body1"
+                android:text="@string/address_title"/>
+
+            <Button
+                android:id="@+id/btn_address_update"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_banner"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:text="@string/update"/>
+
+        </android.support.constraint.ConstraintLayout>
+
         <RelativeLayout
             android:id="@+id/rv_mobile_number"
             android:layout_width="match_parent"
@@ -20,7 +49,7 @@
             android:layout_marginTop="10dp"
             android:orientation="horizontal"
             android:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/banner">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/country_code_picker"

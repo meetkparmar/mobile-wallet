@@ -22,7 +22,7 @@ public interface BaseHomeContract {
 
     interface BaseHomeView extends BaseView<BaseHomePresenter> {
 
-        void showClientDetails(Client client, boolean isLocationAdded);
+        void showClientDetails(Client client);
     }
 
     interface BaseHomePresenter extends BasePresenter {
@@ -34,7 +34,7 @@ public interface BaseHomeContract {
 
         void showSnackbar(String message);
 
-        void setAccountBalance(Account account, boolean isLocationAdded);
+        void setAccountBalance(Account account);
 
         void setBalance(AccountBalance accountBalance);
 

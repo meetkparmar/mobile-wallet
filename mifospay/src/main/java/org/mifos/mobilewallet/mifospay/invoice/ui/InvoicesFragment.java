@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -20,9 +22,11 @@ import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesPresenter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.adapter.InvoicesAdapter;
+import org.mifos.mobilewallet.mifospay.location.ui.LocationActivity;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -35,6 +39,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class InvoicesFragment extends BaseFragment implements InvoiceContract.InvoicesView {
+
+    @Inject
+    LocalRepository localRepository;
 
     @Inject
     InvoicesPresenter mPresenter;
@@ -65,6 +72,12 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
     @BindView(R.id.pb_invoices)
     ProgressBar pbInvoices;
 
+    @BindView(R.id.banner)
+    ConstraintLayout banner;
+
+    @BindView(R.id.btn_address_update)
+    Button btnAddressUpdate;
+
     @Inject
     InvoicesAdapter mInvoicesAdapter;
 
@@ -81,6 +94,20 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         View root = inflater.inflate(R.layout.fragment_invoices, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+
+        if (!localRepository.getPreferencesHelper().getLocation()) {
+            banner.setVisibility(View.VISIBLE);
+        } else {
+            banner.setVisibility(View.GONE);
+        }
+
+        btnAddressUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), LocationActivity.class);
+                startActivity(intent);
+            }
+        });
 
         setupRecyclerView();
         setUpSwipeRefresh();
